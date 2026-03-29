@@ -234,16 +234,16 @@
 
     .audio-btn {
       display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(255,255,255,0.15);
-      border: 2px solid rgba(255,255,255,0.3);
+      background: var(--p800);
+      border: 2px solid var(--p900);
       border-radius: 999px; padding: 7px 18px;
       color: white; font-family: 'Nunito', sans-serif;
       font-weight: 800; font-size: 0.88rem;
       cursor: pointer; margin-top: 12px;
       transition: background 0.15s, transform 0.15s;
     }
-    .audio-btn:hover { background: rgba(255,255,255,0.28); transform: scale(1.05); }
-    .audio-btn.playing { background: rgba(255,255,255,0.35); }
+    .audio-btn:hover { background: var(--p900); transform: scale(1.05); }
+    .audio-btn.playing { background: var(--p900); }
 
     .flip-instruction {
       position: absolute; bottom: 16px; left: 0; right: 0;
@@ -758,56 +758,36 @@ const POOLS = {
     {de:'hellrosa',         es:'rosado claro',         emoji:'🩷',  pron:'/ˈhɛl.ʁoː.za/'},
   ],
   numbers: [
-    {de:'eins',              es:'uno',              emoji:'1️⃣',   pron:'/aɪ̯ns/'},
-    {de:'zwei',              es:'dos',              emoji:'2️⃣',   pron:'/tsvaɪ̯/'},
-    {de:'drei',              es:'tres',             emoji:'3️⃣',   pron:'/dʁaɪ̯/'},
-    {de:'vier',              es:'cuatro',           emoji:'4️⃣',   pron:'/fiːɐ̯/'},
-    {de:'fünf',              es:'cinco',            emoji:'5️⃣',   pron:'/fʏnf/'},
-    {de:'sechs',             es:'seis',             emoji:'6️⃣',   pron:'/zɛks/'},
-    {de:'sieben',            es:'siete',            emoji:'7️⃣',   pron:'/ˈziː.bən/'},
-    {de:'acht',              es:'ocho',             emoji:'8️⃣',   pron:'/axt/'},
-    {de:'neun',              es:'nueve',            emoji:'9️⃣',   pron:'/nɔɪ̯n/'},
-    {de:'zehn',              es:'diez',             emoji:'🔟',   pron:'/tseːn/'},
-    {de:'elf',               es:'once',             emoji:'1️⃣1️⃣', pron:'/ɛlf/'},
-    {de:'zwölf',             es:'doce',             emoji:'1️⃣2️⃣', pron:'/tsvœlf/'},
-    {de:'dreizehn',          es:'trece',            emoji:'1️⃣3️⃣', pron:'/ˈdʁaɪ̯.tseːn/'},
-    {de:'vierzehn',          es:'catorce',          emoji:'1️⃣4️⃣', pron:'/ˈfiːɐ̯.tseːn/'},
-    {de:'fünfzehn',          es:'quince',           emoji:'1️⃣5️⃣', pron:'/ˈfʏnf.tseːn/'},
-    {de:'sechzehn',          es:'dieciséis',        emoji:'1️⃣6️⃣', pron:'/ˈzɛç.tseːn/'},
-    {de:'siebzehn',          es:'diecisiete',       emoji:'1️⃣7️⃣', pron:'/ˈziːp.tseːn/'},
-    {de:'achtzehn',          es:'dieciocho',        emoji:'1️⃣8️⃣', pron:'/ˈax.tseːn/'},
-    {de:'neunzehn',          es:'diecinueve',       emoji:'1️⃣9️⃣', pron:'/ˈnɔɪ̯n.tseːn/'},
-    {de:'zwanzig',           es:'veinte',           emoji:'2️⃣0️⃣', pron:'/ˈtsvan.tsɪç/'},
-    {de:'einundzwanzig',     es:'veintiuno',        emoji:'2️⃣1️⃣', pron:'/ˈaɪ̯n.ʊnt.tsvan.tsɪç/'},
-    {de:'zweiundzwanzig',    es:'veintidós',        emoji:'2️⃣2️⃣', pron:'/ˈtsvaɪ̯.ʊnt.tsvan.tsɪç/'},
-    {de:'dreiundzwanzig',    es:'veintitrés',       emoji:'2️⃣3️⃣', pron:'/ˈdʁaɪ̯.ʊnt.tsvan.tsɪç/'},
-    {de:'vierundzwanzig',    es:'veinticuatro',     emoji:'2️⃣4️⃣', pron:'/ˈfiːɐ̯.ʊnt.tsvan.tsɪç/'},
-    {de:'fünfundzwanzig',    es:'veinticinco',      emoji:'2️⃣5️⃣', pron:'/ˈfʏnf.ʊnt.tsvan.tsɪç/'},
-    {de:'sechsundzwanzig',   es:'veintiséis',       emoji:'2️⃣6️⃣', pron:'/ˈzɛks.ʊnt.tsvan.tsɪç/'},
-    {de:'siebenundzwanzig',  es:'veintisiete',      emoji:'2️⃣7️⃣', pron:'/ˈziː.bən.ʊnt.tsvan.tsɪç/'},
-    {de:'achtundzwanzig',    es:'veintiocho',       emoji:'2️⃣8️⃣', pron:'/ˈax.tʊnt.tsvan.tsɪç/'},
-    {de:'neunundzwanzig',    es:'veintinueve',      emoji:'2️⃣9️⃣', pron:'/ˈnɔɪ̯n.ʊnt.tsvan.tsɪç/'},
-    {de:'dreißig',           es:'treinta',          emoji:'3️⃣0️⃣', pron:'/ˈdʁaɪ̯.sɪç/'},
-    {de:'vierzig',           es:'cuarenta',         emoji:'4️⃣0️⃣', pron:'/ˈfiːɐ̯.tsɪç/'},
-    {de:'fünfzig',           es:'cincuenta',        emoji:'5️⃣0️⃣', pron:'/ˈfʏnf.tsɪç/'},
-    {de:'sechzig',           es:'sesenta',          emoji:'6️⃣0️⃣', pron:'/ˈzɛç.tsɪç/'},
-    {de:'siebzig',           es:'setenta',          emoji:'7️⃣0️⃣', pron:'/ˈziːp.tsɪç/'},
-    {de:'achtzig',           es:'ochenta',          emoji:'8️⃣0️⃣', pron:'/ˈax.tsɪç/'},
-    {de:'neunzig',           es:'noventa',          emoji:'9️⃣0️⃣', pron:'/ˈnɔɪ̯n.tsɪç/'},
-    {de:'hundert',           es:'cien',             emoji:'💯',   pron:'/ˈhʊn.dɐt/'},
-    {de:'null',              es:'cero',             emoji:'0️⃣',   pron:'/nʊl/'},
-    {de:'tausend',           es:'mil',              emoji:'🔢',   pron:'/ˈtaʊ̯.zənt/'},
-    {de:'einunddreißig',     es:'treinta y uno',    emoji:'3️⃣1️⃣', pron:'/ˈaɪ̯n.ʊnt.dʁaɪ̯.sɪç/'},
-    {de:'zweiundvierzig',    es:'cuarenta y dos',   emoji:'4️⃣2️⃣', pron:'/ˈtsvaɪ̯.ʊnt.fiːɐ̯.tsɪç/'},
-    {de:'fünfundsiebzig',    es:'setenta y cinco',  emoji:'7️⃣5️⃣', pron:'/ˈfʏnf.ʊnt.ziːp.tsɪç/'},
-    {de:'neunundneunzig',    es:'noventa y nueve',  emoji:'9️⃣9️⃣', pron:'/ˈnɔɪ̯n.ʊnt.nɔɪ̯n.tsɪç/'},
-    {de:'halb',              es:'medio / mitad',    emoji:'½',   pron:'/halp/'},
-    {de:'ein Drittel',       es:'un tercio',        emoji:'⅓',   pron:'/aɪ̯n ˈdʁɪ.təl/'},
-    {de:'ein Viertel',       es:'un cuarto',        emoji:'¼',   pron:'/aɪ̯n ˈfiːɐ̯.təl/'},
-    {de:'doppelt',           es:'el doble',         emoji:'✌️',   pron:'/ˈdɔ.pəlt/'},
-    {de:'das Dutzend',       es:'la docena',        emoji:'🔢',   pron:'/ˈdʊ.tsənt/'},
-    {de:'das Paar',          es:'el par',           emoji:'👥',   pron:'/paːɐ̯/'},
-    {de:'eine Million',      es:'un millón',        emoji:'🔢',   pron:'/ˈaɪ̯.nə mɪˈljoːn/'},
+    {de:'eins',              es:'uno',           emoji:'1️⃣',   pron:'/aɪ̯ns/'},
+    {de:'zwei',              es:'dos',           emoji:'2️⃣',   pron:'/tsvaɪ̯/'},
+    {de:'drei',              es:'tres',          emoji:'3️⃣',   pron:'/dʁaɪ̯/'},
+    {de:'vier',              es:'cuatro',        emoji:'4️⃣',   pron:'/fiːɐ̯/'},
+    {de:'fünf',              es:'cinco',         emoji:'5️⃣',   pron:'/fʏnf/'},
+    {de:'sechs',             es:'seis',          emoji:'6️⃣',   pron:'/zɛks/'},
+    {de:'sieben',            es:'siete',         emoji:'7️⃣',   pron:'/ˈziː.bən/'},
+    {de:'acht',              es:'ocho',          emoji:'8️⃣',   pron:'/axt/'},
+    {de:'neun',              es:'nueve',         emoji:'9️⃣',   pron:'/nɔɪ̯n/'},
+    {de:'zehn',              es:'diez',          emoji:'🔟',   pron:'/tseːn/'},
+    {de:'elf',               es:'once',          emoji:'1️⃣1️⃣', pron:'/ɛlf/'},
+    {de:'zwölf',             es:'doce',          emoji:'1️⃣2️⃣', pron:'/tsvœlf/'},
+    {de:'dreizehn',          es:'trece',         emoji:'1️⃣3️⃣', pron:'/ˈdʁaɪ̯.tseːn/'},
+    {de:'vierzehn',          es:'catorce',       emoji:'1️⃣4️⃣', pron:'/ˈfiːɐ̯.tseːn/'},
+    {de:'fünfzehn',          es:'quince',        emoji:'1️⃣5️⃣', pron:'/ˈfʏnf.tseːn/'},
+    {de:'sechzehn',          es:'dieciséis',     emoji:'1️⃣6️⃣', pron:'/ˈzɛç.tseːn/'},
+    {de:'siebzehn',          es:'diecisiete',    emoji:'1️⃣7️⃣', pron:'/ˈziːp.tseːn/'},
+    {de:'achtzehn',          es:'dieciocho',     emoji:'1️⃣8️⃣', pron:'/ˈax.tseːn/'},
+    {de:'neunzehn',          es:'diecinueve',    emoji:'1️⃣9️⃣', pron:'/ˈnɔɪ̯n.tseːn/'},
+    {de:'zwanzig',           es:'veinte',        emoji:'2️⃣0️⃣', pron:'/ˈtsvan.tsɪç/'},
+    {de:'einundzwanzig',     es:'veintiuno',     emoji:'2️⃣1️⃣', pron:'/ˈaɪ̯n.ʊnt.tsvan.tsɪç/'},
+    {de:'zweiundzwanzig',    es:'veintidós',     emoji:'2️⃣2️⃣', pron:'/ˈtsvaɪ̯.ʊnt.tsvan.tsɪç/'},
+    {de:'dreiundzwanzig',    es:'veintitrés',    emoji:'2️⃣3️⃣', pron:'/ˈdʁaɪ̯.ʊnt.tsvan.tsɪç/'},
+    {de:'vierundzwanzig',    es:'veinticuatro',  emoji:'2️⃣4️⃣', pron:'/ˈfiːɐ̯.ʊnt.tsvan.tsɪç/'},
+    {de:'fünfundzwanzig',    es:'veinticinco',   emoji:'2️⃣5️⃣', pron:'/ˈfʏnf.ʊnt.tsvan.tsɪç/'},
+    {de:'sechsundzwanzig',   es:'veintiséis',    emoji:'2️⃣6️⃣', pron:'/ˈzɛks.ʊnt.tsvan.tsɪç/'},
+    {de:'siebenundzwanzig',  es:'veintisiete',   emoji:'2️⃣7️⃣', pron:'/ˈziː.bən.ʊnt.tsvan.tsɪç/'},
+    {de:'achtundzwanzig',    es:'veintiocho',    emoji:'2️⃣8️⃣', pron:'/ˈax.tʊnt.tsvan.tsɪç/'},
+    {de:'neunundzwanzig',    es:'veintinueve',   emoji:'2️⃣9️⃣', pron:'/ˈnɔɪ̯n.ʊnt.tsvan.tsɪç/'},
+    {de:'dreißig',           es:'treinta',       emoji:'3️⃣0️⃣', pron:'/ˈdʁaɪ̯.sɪç/'},
   ],
 };
 
