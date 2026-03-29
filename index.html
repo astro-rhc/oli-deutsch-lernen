@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deutsch lernen 🐰 Aprende Alemán</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --p50:  #EEEDFE;
+      --p100: #CECBF6;
+      --p200: #AFA9EC;
+      --p400: #7F77DD;
+      --p600: #534AB7;
+      --p800: #3C3489;
+      --p900: #26215C;
+      --pink: #F4C0D1;
+      --pink2: #ED93B1;
+      --pink3: #D4537E;
+      --bg: #F5F3FF;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .bg-float { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .floaty {
+      position: absolute;
+      opacity: 0.12;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+      8%   { opacity: 0.12; }
+      92%  { opacity: 0.12; }
+      100% { transform: translateY(-80px) rotate(360deg); opacity: 0; }
+    }
+
+    header {
+      position: relative; z-index: 10;
+      background: linear-gradient(160deg, var(--p900) 0%, var(--p800) 60%, var(--p600) 100%);
+      padding: 22px 24px 18px;
+      text-align: center;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.08) 0%, transparent 60%);
+    }
+
+    .ears-wrap { display: flex; justify-content: center; gap: 6px; margin-bottom: 6px; }
+    .ear {
+      width: 18px; height: 38px;
+      background: var(--p400);
+      border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+      position: relative;
+    }
+    .ear::after {
+      content: '';
+      position: absolute;
+      top: 5px; left: 50%; transform: translateX(-50%);
+      width: 8px; height: 24px;
+      background: var(--pink2);
+      border-radius: 50%;
+    }
+
+    header h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(2rem, 6vw, 3.2rem);
+      color: var(--p50);
+      letter-spacing: 1px;
+      position: relative;
+    }
+    .bunny-emoji { display: inline-block; animation: wiggle 2s ease-in-out infinite; }
+    @keyframes wiggle { 0%,100%{transform:rotate(0deg)} 25%{transform:rotate(-10deg)} 75%{transform:rotate(10deg)} }
+
+    header p { color: var(--p200); font-size: 0.9rem; margin-top: 5px; position: relative; }
+
+    .score-bar {
+      position: relative; z-index: 10;
+      display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;
+      padding: 10px 16px;
+      background: var(--p900);
+      border-bottom: 3px solid var(--p800);
+    }
+    .score-pill {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.1);
+      color: var(--p100);
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-weight: 700; font-size: 0.9rem;
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .score-pill b { color: var(--p50); }
+
+    .screen { display: none; position: relative; z-index: 5; }
+    .screen.active { display: block; }
+
+    /* TOPICS */
+    #screen-topics { padding: 28px 16px; max-width: 680px; margin: 0 auto; }
+
+    .section-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.7rem; color: var(--p800);
+      text-align: center; margin-bottom: 4px;
+    }
+    .section-sub { text-align: center; color: var(--p600); margin-bottom: 24px; font-size: 0.95rem; }
+
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(145px, 1fr));
+      gap: 14px;
+    }
+
+    .topic-card {
+      background: white;
+      border-radius: 22px;
+      padding: 22px 14px;
+      text-align: center;
+      cursor: pointer;
+      border: 3px solid var(--p100);
+      transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+      box-shadow: 0 3px 12px rgba(83,74,183,0.10);
+      position: relative;
+    }
+    .topic-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 28px rgba(83,74,183,0.18); border-color: var(--p400); }
+    .topic-card:active { transform: scale(0.97); }
+
+    .card-main-emoji {
+      font-size: 3.2rem; display: block; margin-bottom: 10px;
+      transition: transform 0.2s;
+    }
+    .topic-card:hover .card-main-emoji { transform: translateY(-4px) scale(1.1); }
+
+    .topic-name { font-family: 'Fredoka One', cursive; font-size: 1.1rem; color: var(--p800); }
+    .topic-count { font-size: 0.78rem; color: var(--p400); margin-top: 3px; }
+
+    .best-badge {
+      position: absolute; top: 8px; left: 10px;
+      background: var(--p100); color: var(--p800);
+      font-size: 0.62rem; font-weight: 800;
+      padding: 2px 7px; border-radius: 999px;
+      border: 1px solid var(--p200);
+    }
+
+    .paw-row { text-align: center; font-size: 1.1rem; opacity: 0.25; letter-spacing: 6px; margin: 8px 0; }
+
+    /* GAME */
+    #screen-game { max-width: 580px; margin: 0 auto; padding: 22px 16px; }
+
+    .game-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+
+    .back-btn {
+      background: white; border: 2px solid var(--p100);
+      border-radius: 14px; padding: 8px 14px;
+      cursor: pointer; font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: 0.88rem; color: var(--p800);
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .back-btn:hover { background: var(--p50); border-color: var(--p400); }
+
+    .topic-title-bar { flex: 1; font-family: 'Fredoka One', cursive; font-size: 1.3rem; color: var(--p800); }
+
+    .progress-wrap { background: var(--p100); border-radius: 999px; height: 14px; margin-bottom: 20px; overflow: visible; position: relative; }
+    .progress-fill {
+      height: 100%; border-radius: 999px;
+      background: linear-gradient(90deg, var(--p400), var(--pink3));
+      transition: width 0.55s cubic-bezier(0.34, 1.56, 0.64, 1);
+      position: relative;
+    }
+    .progress-fill::after {
+      content: '🐰';
+      position: absolute; right: -10px; top: -5px;
+      font-size: 1.4rem;
+    }
+
+    .mode-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+    .mode-tab {
+      flex: 1; padding: 10px; border-radius: 14px;
+      border: 2px solid var(--p100); background: white;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.88rem;
+      cursor: pointer; color: var(--p600); transition: all 0.15s; text-align: center;
+    }
+    .mode-tab.active { background: var(--p800); color: white; border-color: var(--p800); }
+
+    /* FLASHCARD */
+    .flashcard-wrap { perspective: 1200px; margin-bottom: 20px; }
+    .flashcard {
+      width: 100%; min-height: 230px; border-radius: 28px;
+      position: relative; transform-style: preserve-3d;
+      transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+    .flashcard.flipped { transform: rotateY(180deg); }
+
+    .card-face {
+      position: absolute; inset: 0; border-radius: 28px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      backface-visibility: hidden; padding: 28px 24px;
+      box-shadow: 0 8px 32px rgba(83,74,183,0.2);
+    }
+
+    .card-front { background: linear-gradient(150deg, var(--p900) 0%, var(--p800) 100%); color: white; }
+
+    .card-front-bunny { font-size: 2rem; margin-bottom: 6px; display: block; animation: bob 2.5s ease-in-out infinite; }
+    @keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+
+    .card-article-badge {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.4rem; padding: 4px 20px;
+      border-radius: 999px; margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+    .article-der  { background: #3B82F6; color: white; }
+    .article-die  { background: var(--pink3); color: white; }
+    .article-das  { background: #16A34A; color: white; }
+    .article-none { display: none; }
+
+    .card-word-de { font-family: 'Fredoka One', cursive; font-size: 2.6rem; color: var(--p50); text-align: center; line-height: 1.1; }
+    .flip-hint { position: absolute; bottom: 14px; font-size: 0.75rem; color: var(--p400); }
+
+    .card-back { background: linear-gradient(150deg, var(--p100) 0%, #E8E4FF 100%); transform: rotateY(180deg); }
+    .card-word-es { font-family: 'Fredoka One', cursive; font-size: 2rem; color: var(--p900); text-align: center; }
+    .card-pron { font-size: 0.9rem; color: var(--p600); margin-top: 6px; font-style: italic; }
+
+    .audio-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(255,255,255,0.15);
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 999px; padding: 7px 18px;
+      color: white; font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: 0.88rem;
+      cursor: pointer; margin-top: 12px;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .audio-btn:hover { background: rgba(255,255,255,0.28); transform: scale(1.05); }
+    .audio-btn.playing { background: rgba(255,255,255,0.35); }
+
+    .flip-instruction {
+      position: absolute; bottom: 16px; left: 0; right: 0;
+      text-align: center;
+      font-size: 0.82rem; color: var(--p200);
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+    }
+    .flip-icon { font-size: 1rem; animation: tapBounce 1.4s ease-in-out infinite; display: inline-block; }
+    @keyframes tapBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
+
+    .nav-hint-row { text-align:center; margin-top:14px; }
+    .nav-hint-text { font-size:0.82rem; color:var(--p400); }
+
+    .grade-buttons { display:flex; gap:12px; justify-content:center; margin-top:14px; }
+
+    .btn-wrong-self {
+      background: #FEE2E2; color: #991B1B;
+      border: 2px solid #FECACA;
+      flex: 1; font-size: 1rem;
+    }
+    .btn-wrong-self:hover { background:#FECACA; }
+
+    .btn-correct-self {
+      background: #DCFCE7; color: #166534;
+      border: 2px solid #BBF7D0;
+      flex: 1; font-size: 1rem;
+    }
+    .btn-correct-self:hover { background:#BBF7D0; }
+
+    .review-banner {
+      background: linear-gradient(135deg, #FEF9C3, #FEF08A);
+      border: 2px solid #FDE047;
+      border-radius: 16px; padding: 14px 18px;
+      text-align: center; margin-bottom: 16px;
+      font-weight: 700; color: #713F12; font-size: 0.95rem;
+    }
+    .review-banner .review-icon { font-size: 1.4rem; display:block; margin-bottom:4px; }
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--p50); border: 2px solid var(--p200);
+      border-radius: 999px; padding: 8px 20px;
+      color: var(--p800); font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: 0.9rem;
+      cursor: pointer; margin: 8px 0 6px;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .audio-btn-quiz:hover { background: var(--p100); transform: scale(1.05); }
+
+    .article-legend {
+      display: flex; justify-content: center; gap: 8px;
+      margin-bottom: 14px; flex-wrap: wrap;
+    }
+    .legend-pill { font-size: 0.75rem; font-weight: 800; padding: 3px 12px; border-radius: 999px; }
+    .legend-der { background: #DBEAFE; color: #1D4ED8; }
+    .legend-die { background: #FCE7F3; color: #9D174D; }
+    .legend-das { background: #DCFCE7; color: #166534; }
+
+    .quiz-article-badge {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem; padding: 3px 16px;
+      border-radius: 999px; display: inline-block;
+      margin-bottom: 6px;
+    }
+
+    .nav-buttons { display: flex; gap: 12px; justify-content: center; }
+    .btn {
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 1rem;
+      border: none; border-radius: 18px; padding: 13px 26px; cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(83,74,183,0.25); }
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--p800); color: white; }
+    .btn-light   { background: var(--p50); color: var(--p800); border: 2px solid var(--p100); }
+    .btn-pink    { background: var(--pink3); color: white; }
+
+    /* QUIZ */
+    .quiz-question {
+      background: white; border-radius: 24px; padding: 28px 20px;
+      text-align: center; box-shadow: 0 4px 16px rgba(83,74,183,0.10);
+      margin-bottom: 18px; border: 2px solid var(--p100);
+    }
+    .quiz-emoji { font-size: 3.8rem; margin-bottom: 10px; display: block; }
+    .quiz-label { font-size: 0.82rem; color: var(--p400); margin-bottom: 6px; }
+    .quiz-word { font-family: 'Fredoka One', cursive; font-size: 2rem; color: var(--p900); }
+
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; }
+    .quiz-option {
+      background: white; border: 2.5px solid var(--p100);
+      border-radius: 16px; padding: 15px 10px;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.95rem;
+      cursor: pointer; transition: all 0.15s; color: var(--p800); text-align: center;
+    }
+    .quiz-option:hover:not(:disabled) { border-color: var(--p400); background: var(--p50); transform: scale(1.03); }
+    .quiz-option.correct { background: #EAF3DE; border-color: #3B6D11; color: #3B6D11; animation: pop 0.4s cubic-bezier(0.34,1.56,0.64,1); }
+    .quiz-option.wrong   { background: #FCEBEB; border-color: #A32D2D; color: #A32D2D; animation: shake 0.35s; }
+
+    @keyframes pop   { 0%{transform:scale(1)} 50%{transform:scale(1.07)} 100%{transform:scale(1)} }
+    @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-7px)} 75%{transform:translateX(7px)} }
+
+    /* RESULTS */
+    #screen-results { max-width: 480px; margin: 0 auto; padding: 40px 24px; text-align: center; }
+
+    .result-bunny {
+      font-size: 5.5rem; display: block; margin-bottom: 10px;
+      animation: bigBounce 0.65s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    @keyframes bigBounce { 0%{transform:scale(0) rotate(-20deg)} 100%{transform:scale(1) rotate(0deg)} }
+
+    .result-title { font-family: 'Fredoka One', cursive; font-size: 2.6rem; color: var(--p800); margin-bottom: 6px; }
+    .result-sub { color: var(--p600); margin-bottom: 28px; font-size: 1rem; }
+
+    .result-stats { display: flex; justify-content: center; gap: 16px; margin-bottom: 28px; }
+    .stat-box { background: white; border-radius: 20px; padding: 18px 26px; box-shadow: 0 4px 16px rgba(83,74,183,0.12); border: 2px solid var(--p100); }
+    .stat-number { font-family: 'Fredoka One', cursive; font-size: 2.4rem; color: var(--p800); }
+    .stat-label { font-size: 0.82rem; color: var(--p400); margin-top: 2px; }
+
+    /* CONFETTI */
+    .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 999; overflow: hidden; }
+    .confetti-piece {
+      position: absolute; top: -20px;
+      animation: cfFall linear forwards;
+    }
+    @keyframes cfFall { 0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1} 100%{transform:translateY(110vh) rotate(720deg) scale(0.5);opacity:0} }
+
+    @media (max-width: 400px) {
+      .quiz-options { grid-template-columns: 1fr; }
+      .card-word-de { font-size: 1.8rem; }
+      .topics-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="bg-float" id="bgFloat"></div>
+
+<header>
+  <div class="ears-wrap"><div class="ear"></div><div class="ear"></div></div>
+  <h1><span class="bunny-emoji">🐰</span> Deutsch lernen!</h1>
+  <p>Aprende alemán jugando • Lerne Deutsch spielend 💜</p>
+  <p style="margin-top:8px;font-size:0.78rem;color:var(--p400);position:relative;">creado por <b style="color:var(--p200);">Olivia</b> 🐾</p>
+</header>
+
+<div class="score-bar">
+  <div class="score-pill">🥕 Zanahorias: <b id="totalStars">0</b></div>
+  <div class="score-pill">⭐ Racha: <b id="streak">0</b></div>
+</div>
+
+<!-- SCREEN 1: TOPICS -->
+<div class="screen active" id="screen-topics">
+  <div style="max-width:680px;margin:0 auto;padding:28px 16px;">
+    <div class="paw-row">🐾 🐾 🐾 🐾 🐾</div>
+    <div class="section-title">¡Elige un tema!</div>
+    <p class="section-sub">Wähle ein Thema — ¿qué quieres aprender hoy?</p>
+    <div class="topics-grid" id="topicsGrid"></div>
+  </div>
+</div>
+
+<!-- SCREEN 2: GAME -->
+<div class="screen" id="screen-game">
+  <div class="game-header">
+    <button class="back-btn" onclick="goToTopics()">🐾 Temas</button>
+    <div class="topic-title-bar" id="topicTitleBar"></div>
+  </div>
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progressFill" style="width:5%"></div>
+  </div>
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tabFlash" onclick="setMode('flash')">🃏 Tarjetas</button>
+    <button class="mode-tab" id="tabQuiz"  onclick="setMode('quiz')">🧠 Quiz</button>
+  </div>
+
+  <!-- FLASHCARD MODE -->
+  <div id="modeFlash">
+    <div class="article-legend">
+      <span class="legend-pill legend-der">der = masculino</span>
+      <span class="legend-pill legend-die">die = femenino</span>
+      <span class="legend-pill legend-das">das = neutro</span>
+    </div>
+    <div class="flashcard-wrap">
+      <div class="flashcard" id="flashcard" onclick="flipCard()">
+        <div class="card-face card-front">
+          <span class="card-front-bunny">🐰</span>
+          <div class="card-article-badge" id="cardArticleBadge"></div>
+          <div class="card-word-de" id="cardDe">Herz</div>
+          <div class="flip-instruction">
+            <span class="flip-icon">👆</span> Haz clic para ver la traducción en español
+          </div>
+        </div>
+        <div class="card-face card-back">
+          <span style="font-size:3rem;margin-bottom:6px;display:block;" id="cardEmojiBack">🫀</span>
+          <div class="card-word-es" id="cardEs">corazón</div>
+          <div class="card-pron" id="cardPron">/hɛʁts/</div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:12px;">
+      <button class="audio-btn" id="flashAudioBtn" onclick="speakCurrent(event)">🔊 Escuchar</button>
+    </div>
+    <!-- Shown only before flipping -->
+    <div id="navBeforeFlip" class="nav-hint-row">
+      <span class="nav-hint-text">⬆️ Da vuelta la tarjeta para calificarte</span>
+    </div>
+    <!-- Shown only after flipping -->
+    <div id="navAfterFlip" class="grade-buttons" style="display:none;">
+      <button class="btn btn-wrong-self" onclick="gradeCard(false)">❌ No lo sabía</button>
+      <button class="btn btn-correct-self" onclick="gradeCard(true)">✅ Lo sabía</button>
+    </div>
+  </div>
+
+  <!-- QUIZ MODE -->
+  <div id="modeQuiz" style="display:none;">
+    <div class="quiz-question">
+      <div class="quiz-label">🐰 ¿Cómo se dice en alemán?</div>
+      <div class="quiz-word" id="quizWord">corazón</div>
+      <div><button class="audio-btn-quiz" id="quizAudioBtn" onclick="speakCurrentQuiz(event)">🔊 Escuchar en alemán</button></div>
+    </div>
+    <div class="quiz-options" id="quizOptions"></div>
+  </div>
+</div>
+
+<!-- SCREEN 3: RESULTS -->
+<div class="screen" id="screen-results">
+  <span class="result-bunny" id="resultBunny">🐰</span>
+  <div class="result-title" id="resultTitle">¡Excelente!</div>
+  <p class="result-sub" id="resultSub">¡Hasi está muy orgulloso de ti!</p>
+  <div class="result-stats">
+    <div class="stat-box">
+      <div class="stat-number" id="resultCorrect">0</div>
+      <div class="stat-label">✅ Correctas</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-number" id="resultCarrots">0</div>
+      <div class="stat-label">🥕 Zanahorias</div>
+    </div>
+  </div>
+  <div class="nav-buttons" style="flex-direction:column;align-items:center;gap:10px;">
+    <button class="btn btn-pink" onclick="replayTopic()">🔄 ¡Jugar de nuevo!</button>
+    <button class="btn btn-primary" onclick="goToTopics()">🏠 Elegir otro tema</button>
+  </div>
+</div>
+
+<div class="confetti-container" id="confettiContainer"></div>
+
+<script>
+// Pick n random items from pool
+function pick(pool, n) {
+  const a = pool.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a.slice(0, n);
+}
+
+const POOLS = {
+  body: [
+    {de:'der Kopf',            es:'la cabeza',           emoji:'🙂',  pron:'/kɔpf/'},
+    {de:'das Auge',            es:'el ojo',              emoji:'👁️',  pron:'/ˈaʊ.ɡə/'},
+    {de:'die Nase',            es:'la nariz',            emoji:'👃',  pron:'/ˈnaː.zə/'},
+    {de:'der Mund',            es:'la boca',             emoji:'👄',  pron:'/mʊnt/'},
+    {de:'das Ohr',             es:'la oreja',            emoji:'👂',  pron:'/oːɐ̯/'},
+    {de:'die Hand',            es:'la mano',             emoji:'✋',  pron:'/hant/'},
+    {de:'der Fuß',             es:'el pie',              emoji:'🦶',  pron:'/fuːs/'},
+    {de:'das Bein',            es:'la pierna',           emoji:'🦵',  pron:'/baɪ̯n/'},
+    {de:'der Bauch',           es:'la barriga',          emoji:'🫃',  pron:'/baʊ̯x/'},
+    {de:'das Herz',            es:'el corazón',          emoji:'🫀',  pron:'/hɛʁts/'},
+    {de:'der Rücken',          es:'la espalda',          emoji:'🧍',  pron:'/ˈʁʏ.kən/'},
+    {de:'der Arm',             es:'el brazo',            emoji:'💪',  pron:'/aʁm/'},
+    {de:'der Finger',          es:'el dedo',             emoji:'☝️',  pron:'/ˈfɪŋ.ɐ/'},
+    {de:'das Knie',            es:'la rodilla',          emoji:'🦵',  pron:'/kniː/'},
+    {de:'der Hals',            es:'el cuello',           emoji:'🧣',  pron:'/hals/'},
+    {de:'die Schulter',        es:'el hombro',           emoji:'🧍',  pron:'/ˈʃʊl.tɐ/'},
+    {de:'der Zahn',            es:'el diente',           emoji:'🦷',  pron:'/tseːn/'},
+    {de:'die Zunge',           es:'la lengua',           emoji:'👅',  pron:'/ˈtsʊŋ.ə/'},
+    {de:'die Lippe',           es:'el labio',            emoji:'💋',  pron:'/ˈlɪ.pə/'},
+    {de:'das Haar',            es:'el pelo',             emoji:'💇',  pron:'/haːɐ̯/'},
+    {de:'das Gesicht',         es:'la cara',             emoji:'😊',  pron:'/ɡəˈzɪçt/'},
+    {de:'die Stirn',           es:'la frente',           emoji:'🙂',  pron:'/ʃtɪʁn/'},
+    {de:'die Wange',           es:'la mejilla',          emoji:'😊',  pron:'/ˈvaŋ.ə/'},
+    {de:'das Kinn',            es:'el mentón',           emoji:'🙂',  pron:'/kɪn/'},
+    {de:'die Augenbraue',      es:'la ceja',             emoji:'🤨',  pron:'/ˈaʊ.ɡən.bʁaʊ.ə/'},
+    {de:'die Wimper',          es:'la pestaña',          emoji:'👁️',  pron:'/ˈvɪm.pɐ/'},
+    {de:'der Daumen',          es:'el pulgar',           emoji:'👍',  pron:'/ˈdaʊ̯.mən/'},
+    {de:'der Ellbogen',        es:'el codo',             emoji:'💪',  pron:'/ˈɛl.boː.ɡən/'},
+    {de:'das Handgelenk',      es:'la muñeca',           emoji:'✋',  pron:'/ˈhant.ɡə.lɛŋk/'},
+    {de:'die Ferse',           es:'el talón',            emoji:'🦶',  pron:'/ˈfɛʁ.zə/'},
+    {de:'der Zeh',             es:'el dedo del pie',     emoji:'🦶',  pron:'/tseː/'},
+    {de:'die Hüfte',           es:'la cadera',           emoji:'🧍',  pron:'/ˈhʏf.tə/'},
+    {de:'die Brust',           es:'el pecho',            emoji:'🫁',  pron:'/bʁʊst/'},
+    {de:'die Lunge',           es:'el pulmón',           emoji:'🫁',  pron:'/ˈlʊŋ.ə/'},
+    {de:'der Magen',           es:'el estómago',         emoji:'🫃',  pron:'/ˈmaː.ɡən/'},
+    {de:'die Leber',           es:'el hígado',           emoji:'🫀',  pron:'/ˈleː.bɐ/'},
+    {de:'der Knochen',         es:'el hueso',            emoji:'🦴',  pron:'/ˈknɔ.xən/'},
+    {de:'der Muskel',          es:'el músculo',          emoji:'💪',  pron:'/ˈmʊs.kəl/'},
+    {de:'die Haut',            es:'la piel',             emoji:'🧍',  pron:'/haʊ̯t/'},
+    {de:'das Gehirn',          es:'el cerebro',          emoji:'🧠',  pron:'/ɡəˈhɪʁn/'},
+    {de:'der Nagel',           es:'la uña',              emoji:'💅',  pron:'/ˈnaː.ɡəl/'},
+    {de:'die Niere',           es:'el riñón',            emoji:'🫀',  pron:'/ˈniː.ʁə/'},
+    {de:'die Rippe',           es:'la costilla',         emoji:'🦴',  pron:'/ˈʁɪ.pə/'},
+    {de:'der Knöchel',         es:'el tobillo',          emoji:'🦶',  pron:'/ˈknœ.çəl/'},
+    {de:'die Wade',            es:'la pantorrilla',      emoji:'🦵',  pron:'/ˈvaː.də/'},
+    {de:'der Nacken',          es:'la nuca',             emoji:'🧍',  pron:'/ˈna.kən/'},
+    {de:'der Oberschenkel',    es:'el muslo',            emoji:'🦵',  pron:'/ˈoː.bɐ.ʃɛŋ.kəl/'},
+    {de:'das Blut',            es:'la sangre',           emoji:'🩸',  pron:'/bluːt/'},
+    {de:'das Gehör',           es:'el oído',             emoji:'👂',  pron:'/ɡəˈhøːɐ̯/'},
+    {de:'der Atem',            es:'la respiración',      emoji:'💨',  pron:'/ˈaː.tɛm/'},
+  ],
+  school: [
+    {de:'der Stift',           es:'el lápiz',            emoji:'✏️',  pron:'/ʃtɪft/'},
+    {de:'das Buch',            es:'el libro',            emoji:'📚',  pron:'/buːx/'},
+    {de:'die Schere',          es:'las tijeras',         emoji:'✂️',  pron:'/ˈʃeː.ʁə/'},
+    {de:'das Heft',            es:'el cuaderno',         emoji:'📓',  pron:'/hɛft/'},
+    {de:'der Radiergummi',     es:'la goma',             emoji:'🧹',  pron:'/ʁaˈdiːɐ̯.ɡʊ.mi/'},
+    {de:'der Rucksack',        es:'la mochila',          emoji:'🎒',  pron:'/ˈʁʊk.zak/'},
+    {de:'das Lineal',          es:'la regla',            emoji:'📏',  pron:'/liˈneːaːl/'},
+    {de:'der Kleber',          es:'el pegamento',        emoji:'🧴',  pron:'/ˈkleː.bɐ/'},
+    {de:'die Farbe',           es:'la pintura',          emoji:'🎨',  pron:'/ˈfaʁ.bə/'},
+    {de:'der Tisch',           es:'la mesa',             emoji:'🪑',  pron:'/tɪʃ/'},
+    {de:'der Stuhl',           es:'la silla',            emoji:'🪑',  pron:'/ʃtuːl/'},
+    {de:'die Tafel',           es:'la pizarra',          emoji:'🟫',  pron:'/ˈtaː.fəl/'},
+    {de:'der Bleistift',       es:'el lápiz de grafito', emoji:'✏️',  pron:'/ˈblaɪ̯.ʃtɪft/'},
+    {de:'das Papier',          es:'el papel',            emoji:'📄',  pron:'/paˈpiːɐ̯/'},
+    {de:'der Spitzer',         es:'el sacapuntas',       emoji:'🖊️',  pron:'/ˈʃpɪ.tsɐ/'},
+    {de:'der Pinsel',          es:'el pincel',           emoji:'🖌️',  pron:'/ˈpɪn.zəl/'},
+    {de:'der Füller',          es:'la pluma fuente',     emoji:'🖊️',  pron:'/ˈfʏ.lɐ/'},
+    {de:'der Kugelschreiber',  es:'el bolígrafo',        emoji:'🖊️',  pron:'/ˈkuː.ɡəl.ʃʁaɪ̯.bɐ/'},
+    {de:'das Wörterbuch',      es:'el diccionario',      emoji:'📖',  pron:'/ˈvœʁ.tɐ.buːx/'},
+    {de:'der Taschenrechner',  es:'la calculadora',      emoji:'🧮',  pron:'/ˈta.ʃən.ʁɛç.nɐ/'},
+    {de:'der Computer',        es:'el computador',       emoji:'💻',  pron:'/kɔmˈpjuː.tɐ/'},
+    {de:'die Kreide',          es:'la tiza',             emoji:'🟫',  pron:'/ˈkʁaɪ̯.də/'},
+    {de:'der Marker',          es:'el marcador',         emoji:'🖍️',  pron:'/ˈmaʁ.kɐ/'},
+    {de:'das Klassenzimmer',   es:'el salón de clases',  emoji:'🏫',  pron:'/ˈkla.sən.tsɪ.mɐ/'},
+    {de:'die Schule',          es:'el colegio',          emoji:'🏫',  pron:'/ˈʃuː.lə/'},
+    {de:'der Lehrer',          es:'el profesor',         emoji:'👨‍🏫',  pron:'/ˈleː.ʁɐ/'},
+    {de:'die Lehrerin',        es:'la profesora',        emoji:'👩‍🏫',  pron:'/ˈleː.ʁə.ʁɪn/'},
+    {de:'die Hausaufgabe',     es:'la tarea',            emoji:'📝',  pron:'/ˈhaʊ̯s.aʊ̯f.ɡaː.bə/'},
+    {de:'die Pause',           es:'el recreo',           emoji:'⏸️',  pron:'/ˈpaʊ̯.zə/'},
+    {de:'die Note',            es:'la calificación',     emoji:'📊',  pron:'/ˈnoː.tə/'},
+    {de:'die Prüfung',         es:'el examen',           emoji:'📝',  pron:'/ˈpʁyː.fʊŋ/'},
+    {de:'das Mäppchen',        es:'el estuche',          emoji:'🎒',  pron:'/ˈmɛp.çən/'},
+    {de:'das Geodreieck',      es:'el transportador',    emoji:'📐',  pron:'/ɡeˈoː.dʁaɪ̯.ɛk/'},
+    {de:'der Zirkel',          es:'el compás',           emoji:'📐',  pron:'/ˈtsɪʁ.kəl/'},
+    {de:'die Wanduhr',         es:'el reloj de pared',   emoji:'🕐',  pron:'/ˈvant.uːɐ̯/'},
+    {de:'das Fenster',         es:'la ventana',          emoji:'🪟',  pron:'/ˈfɛns.tɐ/'},
+    {de:'die Tür',             es:'la puerta',           emoji:'🚪',  pron:'/tyːɐ̯/'},
+    {de:'die Bibliothek',      es:'la biblioteca',       emoji:'📚',  pron:'/bibliˈoː.teːk/'},
+    {de:'die Turnhalle',       es:'el gimnasio',         emoji:'🏋️',  pron:'/ˈtʊʁn.ha.lə/'},
+    {de:'der Schulhof',        es:'el patio del colegio',emoji:'🏫',  pron:'/ˈʃuːl.hoːf/'},
+    {de:'der Stundenplan',     es:'el horario',          emoji:'📅',  pron:'/ˈʃtʊn.dən.plaːn/'},
+    {de:'der Atlas',           es:'el atlas',            emoji:'🗺️',  pron:'/ˈat.las/'},
+    {de:'die Landkarte',       es:'el mapa',             emoji:'🗺️',  pron:'/ˈlant.kaʁ.tə/'},
+    {de:'der Globus',          es:'el globo terráqueo',  emoji:'🌍',  pron:'/ˈɡloː.bʊs/'},
+    {de:'die Schutzfolie',     es:'el forro',            emoji:'📄',  pron:'/ˈʃʊts.foː.liə/'},
+    {de:'der Schulbus',        es:'el bus escolar',      emoji:'🚌',  pron:'/ˈʃuːl.bʊs/'},
+    {de:'die Kantine',         es:'el comedor',          emoji:'🍽️',  pron:'/kanˈtiː.nə/'},
+    {de:'der Direktor',        es:'el director',         emoji:'👔',  pron:'/diˈʁɛk.toːɐ̯/'},
+    {de:'die Klasse',          es:'el curso / la clase', emoji:'🏫',  pron:'/ˈkla.sə/'},
+    {de:'das Fach',            es:'la asignatura',       emoji:'📚',  pron:'/fax/'},
+    {de:'der Unterricht',      es:'la clase / la lección',emoji:'📖', pron:'/ˈʊn.tɐ.ʁɪçt/'},
+  ],
+  fruits: [
+    {de:'der Apfel',           es:'la manzana',          emoji:'🍎',  pron:'/ˈap.fəl/'},
+    {de:'die Banane',          es:'el plátano',          emoji:'🍌',  pron:'/baˈnaː.nə/'},
+    {de:'die Orange',          es:'la naranja',          emoji:'🍊',  pron:'/oˈʁaŋ.ʒə/'},
+    {de:'die Erdbeere',        es:'la fresa',            emoji:'🍓',  pron:'/ˈeːʁt.beː.ʁə/'},
+    {de:'die Traube',          es:'la uva',              emoji:'🍇',  pron:'/ˈtʁaʊ̯.bə/'},
+    {de:'die Zitrone',         es:'el limón',            emoji:'🍋',  pron:'/tsiˈtʁoː.nə/'},
+    {de:'die Kirsche',         es:'la cereza',           emoji:'🍒',  pron:'/ˈkɪʁ.ʃə/'},
+    {de:'die Wassermelone',    es:'la sandía',           emoji:'🍉',  pron:'/ˈva.sɐ.me.loː.nə/'},
+    {de:'die Ananas',          es:'la piña',             emoji:'🍍',  pron:'/ˈa.na.nas/'},
+    {de:'die Birne',           es:'la pera',             emoji:'🍐',  pron:'/ˈbɪʁ.nə/'},
+    {de:'die Mango',           es:'el mango',            emoji:'🥭',  pron:'/ˈmaŋ.ɡo/'},
+    {de:'die Pflaume',         es:'la ciruela',          emoji:'🫐',  pron:'/ˈpflaʊ̯.mə/'},
+    {de:'die Himbeere',        es:'la frambuesa',        emoji:'🍓',  pron:'/ˈhɪm.beː.ʁə/'},
+    {de:'die Kokosnuss',       es:'el coco',             emoji:'🥥',  pron:'/ˈkoː.kos.nʊs/'},
+    {de:'die Melone',          es:'el melón',            emoji:'🍈',  pron:'/meˈloː.nə/'},
+    {de:'die Kiwi',            es:'el kiwi',             emoji:'🥝',  pron:'/ˈkiː.vi/'},
+    {de:'der Pfirsich',        es:'el durazno',          emoji:'🍑',  pron:'/ˈpfiːɐ̯.zɪç/'},
+    {de:'die Aprikose',        es:'el damasco',          emoji:'🍑',  pron:'/apʁiˈkoː.zə/'},
+    {de:'die Papaya',          es:'la papaya',           emoji:'🍈',  pron:'/paˈpaː.ja/'},
+    {de:'die Feige',           es:'el higo',             emoji:'🍈',  pron:'/ˈfaɪ̯.ɡə/'},
+    {de:'die Heidelbeere',     es:'el arándano',         emoji:'🫐',  pron:'/ˈhaɪ̯.dəl.beː.ʁə/'},
+    {de:'die Brombeere',       es:'la mora',             emoji:'🫐',  pron:'/ˈbʁɔm.beː.ʁə/'},
+    {de:'die Mandarine',       es:'la mandarina',        emoji:'🍊',  pron:'/mandaˈʁiː.nə/'},
+    {de:'die Limette',         es:'la lima',             emoji:'🍋',  pron:'/liˈmɛ.tə/'},
+    {de:'die Avocado',         es:'el palta',            emoji:'🥑',  pron:'/avo.ˈkaː.do/'},
+    {de:'die Tomate',          es:'el tomate',           emoji:'🍅',  pron:'/toˈmaː.tə/'},
+    {de:'die Gurke',           es:'el pepino',           emoji:'🥒',  pron:'/ˈɡʊʁ.kə/'},
+    {de:'die Paprika',         es:'el pimiento',         emoji:'🫑',  pron:'/ˈpap.ʁi.ka/'},
+    {de:'die Kartoffel',       es:'la papa',             emoji:'🥔',  pron:'/kaʁˈtɔ.fəl/'},
+    {de:'die Karotte',         es:'la zanahoria',        emoji:'🥕',  pron:'/kaˈʁɔ.tə/'},
+    {de:'der Kürbis',          es:'la calabaza',         emoji:'🎃',  pron:'/ˈkʏʁ.bɪs/'},
+    {de:'der Mais',            es:'el maíz',             emoji:'🌽',  pron:'/maɪ̯s/'},
+    {de:'die Zwiebel',         es:'la cebolla',          emoji:'🧅',  pron:'/ˈtsviː.bəl/'},
+    {de:'der Knoblauch',       es:'el ajo',              emoji:'🧄',  pron:'/ˈknoːp.laʊ̯x/'},
+    {de:'der Brokkoli',        es:'el brócoli',          emoji:'🥦',  pron:'/ˈbʁɔ.ko.li/'},
+    {de:'der Salat',           es:'la lechuga',          emoji:'🥗',  pron:'/zaˈlaːt/'},
+    {de:'die Erbse',           es:'el guisante',         emoji:'🫛',  pron:'/ˈɛʁp.zə/'},
+    {de:'die Bohne',           es:'el frijol',           emoji:'🫘',  pron:'/ˈboː.nə/'},
+    {de:'der Pilz',            es:'el hongo',            emoji:'🍄',  pron:'/pɪlts/'},
+    {de:'der Blumenkohl',      es:'la coliflor',         emoji:'🥦',  pron:'/ˈbluː.mən.koːl/'},
+    {de:'der Spinat',          es:'la espinaca',         emoji:'🥬',  pron:'/ʃpiˈnaːt/'},
+    {de:'die Aubergine',       es:'la berenjena',        emoji:'🍆',  pron:'/obeʁˈʒiː.nə/'},
+    {de:'der Spargel',         es:'el espárrago',        emoji:'🌿',  pron:'/ˈʃpaʁ.ɡəl/'},
+    {de:'der Lauch',           es:'el puerro',           emoji:'🌿',  pron:'/laʊ̯x/'},
+    {de:'der Kürbiskern',      es:'la pepita de calabaza',emoji:'🎃', pron:'/ˈkʏʁ.bɪs.kɛʁn/'},
+    {de:'die Olive',           es:'la aceituna',         emoji:'🫒',  pron:'/oˈliː.və/'},
+    {de:'der Ingwer',          es:'el jengibre',         emoji:'🫚',  pron:'/ˈɪŋ.vɐ/'},
+    {de:'die Rübe',            es:'el nabo',             emoji:'🥕',  pron:'/ˈʁyː.bə/'},
+    {de:'der Sellerie',        es:'el apio',             emoji:'🌿',  pron:'/ˈzɛ.lə.ʁiː/'},
+    {de:'die Artischocke',     es:'la alcachofa',        emoji:'🥬',  pron:'/aʁtiˈʃɔ.kə/'},
+  ],
+  animals: [
+    {de:'der Hund',            es:'el perro',            emoji:'🐶',  pron:'/hʊnt/'},
+    {de:'die Katze',           es:'el gato',             emoji:'🐱',  pron:'/ˈkat.tsə/'},
+    {de:'das Pferd',           es:'el caballo',          emoji:'🐴',  pron:'/pfeːʁt/'},
+    {de:'der Vogel',           es:'el pájaro',           emoji:'🐦',  pron:'/ˈfoː.ɡəl/'},
+    {de:'der Fisch',           es:'el pez',              emoji:'🐟',  pron:'/fɪʃ/'},
+    {de:'die Kuh',             es:'la vaca',             emoji:'🐄',  pron:'/kuː/'},
+    {de:'das Schwein',         es:'el cerdo',            emoji:'🐷',  pron:'/ʃvaɪ̯n/'},
+    {de:'der Löwe',            es:'el león',             emoji:'🦁',  pron:'/ˈløː.və/'},
+    {de:'der Elefant',         es:'el elefante',         emoji:'🐘',  pron:'/ˈeː.le.fant/'},
+    {de:'das Kaninchen',       es:'el conejo',           emoji:'🐰',  pron:'/kaˈniːn.çən/'},
+    {de:'der Bär',             es:'el oso',              emoji:'🐻',  pron:'/bɛːɐ̯/'},
+    {de:'die Schlange',        es:'la serpiente',        emoji:'🐍',  pron:'/ˈʃlaŋ.ə/'},
+    {de:'der Affe',            es:'el mono',             emoji:'🐒',  pron:'/ˈa.fə/'},
+    {de:'die Ente',            es:'el pato',             emoji:'🦆',  pron:'/ˈɛn.tə/'},
+    {de:'der Tiger',           es:'el tigre',            emoji:'🐯',  pron:'/ˈtiː.ɡɐ/'},
+    {de:'der Wolf',            es:'el lobo',             emoji:'🐺',  pron:'/vɔlf/'},
+    {de:'der Fuchs',           es:'el zorro',            emoji:'🦊',  pron:'/fʊks/'},
+    {de:'das Schaf',           es:'la oveja',            emoji:'🐑',  pron:'/ʃaːf/'},
+    {de:'die Ziege',           es:'la cabra',            emoji:'🐐',  pron:'/ˈtsiː.ɡə/'},
+    {de:'der Hahn',            es:'el gallo',            emoji:'🐓',  pron:'/haːn/'},
+    {de:'das Huhn',            es:'la gallina',          emoji:'🐔',  pron:'/huːn/'},
+    {de:'die Maus',            es:'el ratón',            emoji:'🐭',  pron:'/maʊ̯s/'},
+    {de:'der Hamster',         es:'el hámster',          emoji:'🐹',  pron:'/ˈham.stɐ/'},
+    {de:'der Papagei',         es:'el loro',             emoji:'🦜',  pron:'/ˈpa.pa.ɡaɪ̯/'},
+    {de:'der Pinguin',         es:'el pingüino',         emoji:'🐧',  pron:'/ˈpɪŋ.ɡuɪ̯n/'},
+    {de:'der Delfin',          es:'el delfín',           emoji:'🐬',  pron:'/dɛlˈfiːn/'},
+    {de:'der Hai',             es:'el tiburón',          emoji:'🦈',  pron:'/haɪ̯/'},
+    {de:'die Schildkröte',     es:'la tortuga',          emoji:'🐢',  pron:'/ˈʃɪlt.kʁøː.tə/'},
+    {de:'der Frosch',          es:'la rana',             emoji:'🐸',  pron:'/fʁɔʃ/'},
+    {de:'die Biene',           es:'la abeja',            emoji:'🐝',  pron:'/ˈbiː.nə/'},
+    {de:'der Schmetterling',   es:'la mariposa',         emoji:'🦋',  pron:'/ˈʃmɛ.tɐ.lɪŋ/'},
+    {de:'die Spinne',          es:'la araña',            emoji:'🕷️',  pron:'/ˈʃpɪ.nə/'},
+    {de:'die Ameise',          es:'la hormiga',          emoji:'🐜',  pron:'/ˈaː.maɪ̯.zə/'},
+    {de:'der Adler',           es:'el águila',           emoji:'🦅',  pron:'/ˈaːd.lɐ/'},
+    {de:'das Krokodil',        es:'el cocodrilo',        emoji:'🐊',  pron:'/kʁokoˈdiːl/'},
+    {de:'das Zebra',           es:'la cebra',            emoji:'🦓',  pron:'/ˈtseː.bʁa/'},
+    {de:'die Giraffe',         es:'la jirafa',           emoji:'🦒',  pron:'/ʒiˈʁa.fə/'},
+    {de:'das Nilpferd',        es:'el hipopótamo',       emoji:'🦛',  pron:'/ˈniːl.pfeːʁt/'},
+    {de:'das Nashorn',         es:'el rinoceronte',      emoji:'🦏',  pron:'/ˈnaːs.hɔʁn/'},
+    {de:'der Gorilla',         es:'el gorila',           emoji:'🦍',  pron:'/ɡoˈʁɪ.la/'},
+    {de:'der Flamingo',        es:'el flamenco',         emoji:'🦩',  pron:'/flaˈmɪŋ.ɡo/'},
+    {de:'der Gepard',          es:'el guepardo',         emoji:'🐆',  pron:'/ˈɡeː.paʁt/'},
+    {de:'der Eisbär',          es:'el oso polar',        emoji:'🐻‍❄️', pron:'/ˈaɪ̯s.bɛːɐ̯/'},
+    {de:'der Biber',           es:'el castor',           emoji:'🦫',  pron:'/ˈbiː.bɐ/'},
+    {de:'der Igel',            es:'el erizo',            emoji:'🦔',  pron:'/ˈiː.ɡəl/'},
+    {de:'das Eichhörnchen',    es:'la ardilla',          emoji:'🐿️',  pron:'/ˈaɪ̯ç.hœʁn.çən/'},
+    {de:'der Hirsch',          es:'el ciervo',           emoji:'🦌',  pron:'/hɪʁʃ/'},
+    {de:'das Wildschwein',     es:'el jabalí',           emoji:'🐗',  pron:'/ˈvɪlt.ʃvaɪ̯n/'},
+    {de:'der Hase',            es:'la liebre',           emoji:'🐇',  pron:'/ˈhaː.zə/'},
+    {de:'die Krähe',           es:'el cuervo',           emoji:'🐦‍⬛',  pron:'/ˈkʁɛː.ə/'},
+  ],
+  colors: [
+    {de:'rot',              es:'rojo',                 emoji:'🔴',  pron:'/ʁoːt/'},
+    {de:'blau',             es:'azul',                 emoji:'🔵',  pron:'/blaʊ̯/'},
+    {de:'grün',             es:'verde',                emoji:'🟢',  pron:'/ɡʁyːn/'},
+    {de:'gelb',             es:'amarillo',             emoji:'🟡',  pron:'/ɡɛlp/'},
+    {de:'orange',           es:'anaranjado',           emoji:'🟠',  pron:'/oˈʁaŋ.ʒə/'},
+    {de:'lila',             es:'morado',               emoji:'🟣',  pron:'/ˈliː.la/'},
+    {de:'weiß',             es:'blanco',               emoji:'⬜',  pron:'/vaɪ̯s/'},
+    {de:'schwarz',          es:'negro',                emoji:'⬛',  pron:'/ʃvaʁts/'},
+    {de:'rosa',             es:'rosado',               emoji:'🩷',  pron:'/ˈʁoː.za/'},
+    {de:'braun',            es:'café / marrón',        emoji:'🟫',  pron:'/bʁaʊ̯n/'},
+    {de:'grau',             es:'gris',                 emoji:'🩶',  pron:'/ɡʁaʊ̯/'},
+    {de:'türkis',           es:'turquesa',             emoji:'🩵',  pron:'/tʏʁˈkiːs/'},
+    {de:'silber',           es:'plateado',             emoji:'🪙',  pron:'/ˈzɪl.bɐ/'},
+    {de:'gold',             es:'dorado',               emoji:'🌟',  pron:'/ɡɔlt/'},
+    {de:'beige',            es:'beige',                emoji:'🏜️',  pron:'/beːʃ/'},
+    {de:'dunkelblau',       es:'azul oscuro',          emoji:'🔵',  pron:'/ˈdʊŋ.kəl.blaʊ̯/'},
+    {de:'hellblau',         es:'azul claro',           emoji:'🩵',  pron:'/ˈhɛl.blaʊ̯/'},
+    {de:'dunkelgrün',       es:'verde oscuro',         emoji:'🟢',  pron:'/ˈdʊŋ.kəl.ɡʁyːn/'},
+    {de:'hellgrün',         es:'verde claro',          emoji:'💚',  pron:'/ˈhɛl.ɡʁyːn/'},
+    {de:'dunkelrot',        es:'rojo oscuro',          emoji:'🔴',  pron:'/ˈdʊŋ.kəl.ʁoːt/'},
+    {de:'violett',          es:'violeta',              emoji:'🟣',  pron:'/vioˈlɛt/'},
+    {de:'magenta',          es:'magenta',              emoji:'🌸',  pron:'/maˈɡɛn.ta/'},
+    {de:'mintgrün',         es:'verde menta',          emoji:'🌿',  pron:'/ˈmɪnt.ɡʁyːn/'},
+    {de:'ocker',            es:'ocre',                 emoji:'🟡',  pron:'/ˈɔ.kɐ/'},
+    {de:'bordeaux',         es:'burdeos',              emoji:'🍷',  pron:'/bɔʁˈdoː/'},
+    {de:'khaki',            es:'caqui',                emoji:'🟫',  pron:'/ˈkaː.ki/'},
+    {de:'lavendel',         es:'lavanda',              emoji:'💜',  pron:'/laˈvɛn.dəl/'},
+    {de:'koralle',          es:'coral',                emoji:'🪸',  pron:'/koˈʁa.lə/'},
+    {de:'elfenbein',        es:'marfil',               emoji:'⬜',  pron:'/ˈɛl.fən.baɪ̯n/'},
+    {de:'indigo',           es:'índigo',               emoji:'🔵',  pron:'/ˈɪn.di.ɡoː/'},
+    {de:'smaragdgrün',      es:'verde esmeralda',      emoji:'💚',  pron:'/zmaˈʁakt.ɡʁyːn/'},
+    {de:'rubinrot',         es:'rojo rubí',            emoji:'❤️',  pron:'/ʁuˈbiːn.ʁoːt/'},
+    {de:'himmelblau',       es:'azul cielo',           emoji:'🔵',  pron:'/ˈhɪ.məl.blaʊ̯/'},
+    {de:'hellgrau',         es:'gris claro',           emoji:'🩶',  pron:'/ˈhɛl.ɡʁaʊ̯/'},
+    {de:'dunkelgrau',       es:'gris oscuro',          emoji:'🩶',  pron:'/ˈdʊŋ.kəl.ɡʁaʊ̯/'},
+    {de:'anthrazit',        es:'antracita',            emoji:'⬛',  pron:'/anˈtʁaː.tsɪt/'},
+    {de:'bronze',           es:'bronce',               emoji:'🥉',  pron:'/ˈbʁɔn.tsə/'},
+    {de:'kupfer',           es:'cobre',                emoji:'🪙',  pron:'/ˈkʊp.fɐ/'},
+    {de:'bunt',             es:'colorido',             emoji:'🌈',  pron:'/bʊnt/'},
+    {de:'dunkel',           es:'oscuro',               emoji:'🌑',  pron:'/ˈdʊŋ.kəl/'},
+    {de:'hell',             es:'claro',                emoji:'🌕',  pron:'/hɛl/'},
+    {de:'matt',             es:'mate',                 emoji:'🎨',  pron:'/mat/'},
+    {de:'glänzend',         es:'brillante',            emoji:'✨',  pron:'/ˈɡlɛn.tsənt/'},
+    {de:'pastellfarben',    es:'color pastel',         emoji:'🎨',  pron:'/pasˈtɛl.faʁ.bən/'},
+    {de:'cremefarben',      es:'color crema',          emoji:'⬜',  pron:'/ˈkʁeː.mə.faʁ.bən/'},
+    {de:'sandfarben',       es:'color arena',          emoji:'🏖️',  pron:'/ˈzant.faʁ.bən/'},
+    {de:'petrol',           es:'azul petróleo',        emoji:'🩵',  pron:'/ˈpeː.tʁɔl/'},
+    {de:'cyan',             es:'cian',                 emoji:'🩵',  pron:'/ˈtsyː.an/'},
+    {de:'transparent',      es:'transparente',         emoji:'🫧',  pron:'/tʁanspaˈʁɛnt/'},
+    {de:'hellrosa',         es:'rosado claro',         emoji:'🩷',  pron:'/ˈhɛl.ʁoː.za/'},
+  ],
+  numbers: [
+    {de:'eins',              es:'uno',              emoji:'1️⃣',   pron:'/aɪ̯ns/'},
+    {de:'zwei',              es:'dos',              emoji:'2️⃣',   pron:'/tsvaɪ̯/'},
+    {de:'drei',              es:'tres',             emoji:'3️⃣',   pron:'/dʁaɪ̯/'},
+    {de:'vier',              es:'cuatro',           emoji:'4️⃣',   pron:'/fiːɐ̯/'},
+    {de:'fünf',              es:'cinco',            emoji:'5️⃣',   pron:'/fʏnf/'},
+    {de:'sechs',             es:'seis',             emoji:'6️⃣',   pron:'/zɛks/'},
+    {de:'sieben',            es:'siete',            emoji:'7️⃣',   pron:'/ˈziː.bən/'},
+    {de:'acht',              es:'ocho',             emoji:'8️⃣',   pron:'/axt/'},
+    {de:'neun',              es:'nueve',            emoji:'9️⃣',   pron:'/nɔɪ̯n/'},
+    {de:'zehn',              es:'diez',             emoji:'🔟',   pron:'/tseːn/'},
+    {de:'elf',               es:'once',             emoji:'1️⃣1️⃣', pron:'/ɛlf/'},
+    {de:'zwölf',             es:'doce',             emoji:'1️⃣2️⃣', pron:'/tsvœlf/'},
+    {de:'dreizehn',          es:'trece',            emoji:'1️⃣3️⃣', pron:'/ˈdʁaɪ̯.tseːn/'},
+    {de:'vierzehn',          es:'catorce',          emoji:'1️⃣4️⃣', pron:'/ˈfiːɐ̯.tseːn/'},
+    {de:'fünfzehn',          es:'quince',           emoji:'1️⃣5️⃣', pron:'/ˈfʏnf.tseːn/'},
+    {de:'sechzehn',          es:'dieciséis',        emoji:'1️⃣6️⃣', pron:'/ˈzɛç.tseːn/'},
+    {de:'siebzehn',          es:'diecisiete',       emoji:'1️⃣7️⃣', pron:'/ˈziːp.tseːn/'},
+    {de:'achtzehn',          es:'dieciocho',        emoji:'1️⃣8️⃣', pron:'/ˈax.tseːn/'},
+    {de:'neunzehn',          es:'diecinueve',       emoji:'1️⃣9️⃣', pron:'/ˈnɔɪ̯n.tseːn/'},
+    {de:'zwanzig',           es:'veinte',           emoji:'2️⃣0️⃣', pron:'/ˈtsvan.tsɪç/'},
+    {de:'einundzwanzig',     es:'veintiuno',        emoji:'2️⃣1️⃣', pron:'/ˈaɪ̯n.ʊnt.tsvan.tsɪç/'},
+    {de:'zweiundzwanzig',    es:'veintidós',        emoji:'2️⃣2️⃣', pron:'/ˈtsvaɪ̯.ʊnt.tsvan.tsɪç/'},
+    {de:'dreiundzwanzig',    es:'veintitrés',       emoji:'2️⃣3️⃣', pron:'/ˈdʁaɪ̯.ʊnt.tsvan.tsɪç/'},
+    {de:'vierundzwanzig',    es:'veinticuatro',     emoji:'2️⃣4️⃣', pron:'/ˈfiːɐ̯.ʊnt.tsvan.tsɪç/'},
+    {de:'fünfundzwanzig',    es:'veinticinco',      emoji:'2️⃣5️⃣', pron:'/ˈfʏnf.ʊnt.tsvan.tsɪç/'},
+    {de:'sechsundzwanzig',   es:'veintiséis',       emoji:'2️⃣6️⃣', pron:'/ˈzɛks.ʊnt.tsvan.tsɪç/'},
+    {de:'siebenundzwanzig',  es:'veintisiete',      emoji:'2️⃣7️⃣', pron:'/ˈziː.bən.ʊnt.tsvan.tsɪç/'},
+    {de:'achtundzwanzig',    es:'veintiocho',       emoji:'2️⃣8️⃣', pron:'/ˈax.tʊnt.tsvan.tsɪç/'},
+    {de:'neunundzwanzig',    es:'veintinueve',      emoji:'2️⃣9️⃣', pron:'/ˈnɔɪ̯n.ʊnt.tsvan.tsɪç/'},
+    {de:'dreißig',           es:'treinta',          emoji:'3️⃣0️⃣', pron:'/ˈdʁaɪ̯.sɪç/'},
+    {de:'vierzig',           es:'cuarenta',         emoji:'4️⃣0️⃣', pron:'/ˈfiːɐ̯.tsɪç/'},
+    {de:'fünfzig',           es:'cincuenta',        emoji:'5️⃣0️⃣', pron:'/ˈfʏnf.tsɪç/'},
+    {de:'sechzig',           es:'sesenta',          emoji:'6️⃣0️⃣', pron:'/ˈzɛç.tsɪç/'},
+    {de:'siebzig',           es:'setenta',          emoji:'7️⃣0️⃣', pron:'/ˈziːp.tsɪç/'},
+    {de:'achtzig',           es:'ochenta',          emoji:'8️⃣0️⃣', pron:'/ˈax.tsɪç/'},
+    {de:'neunzig',           es:'noventa',          emoji:'9️⃣0️⃣', pron:'/ˈnɔɪ̯n.tsɪç/'},
+    {de:'hundert',           es:'cien',             emoji:'💯',   pron:'/ˈhʊn.dɐt/'},
+    {de:'null',              es:'cero',             emoji:'0️⃣',   pron:'/nʊl/'},
+    {de:'tausend',           es:'mil',              emoji:'🔢',   pron:'/ˈtaʊ̯.zənt/'},
+    {de:'einunddreißig',     es:'treinta y uno',    emoji:'3️⃣1️⃣', pron:'/ˈaɪ̯n.ʊnt.dʁaɪ̯.sɪç/'},
+    {de:'zweiundvierzig',    es:'cuarenta y dos',   emoji:'4️⃣2️⃣', pron:'/ˈtsvaɪ̯.ʊnt.fiːɐ̯.tsɪç/'},
+    {de:'fünfundsiebzig',    es:'setenta y cinco',  emoji:'7️⃣5️⃣', pron:'/ˈfʏnf.ʊnt.ziːp.tsɪç/'},
+    {de:'neunundneunzig',    es:'noventa y nueve',  emoji:'9️⃣9️⃣', pron:'/ˈnɔɪ̯n.ʊnt.nɔɪ̯n.tsɪç/'},
+    {de:'halb',              es:'medio / mitad',    emoji:'½',   pron:'/halp/'},
+    {de:'ein Drittel',       es:'un tercio',        emoji:'⅓',   pron:'/aɪ̯n ˈdʁɪ.təl/'},
+    {de:'ein Viertel',       es:'un cuarto',        emoji:'¼',   pron:'/aɪ̯n ˈfiːɐ̯.təl/'},
+    {de:'doppelt',           es:'el doble',         emoji:'✌️',   pron:'/ˈdɔ.pəlt/'},
+    {de:'das Dutzend',       es:'la docena',        emoji:'🔢',   pron:'/ˈdʊ.tsənt/'},
+    {de:'das Paar',          es:'el par',           emoji:'👥',   pron:'/paːɐ̯/'},
+    {de:'eine Million',      es:'un millón',        emoji:'🔢',   pron:'/ˈaɪ̯.nə mɪˈljoːn/'},
+  ],
+};
+
+const TOPICS = [
+  { id:'body',    name:'Cuerpo',   emoji:'🧍', bunny:'🐰', get words(){ return pick(POOLS.body,    15); } },
+  { id:'school',  name:'Útiles',   emoji:'🎒', bunny:'🐇', get words(){ return pick(POOLS.school,  15); } },
+  { id:'fruits',  name:'Frutas',   emoji:'🍎', bunny:'🐰', get words(){ return pick(POOLS.fruits,  15); } },
+  { id:'animals', name:'Animales', emoji:'🐶', bunny:'🐇', get words(){ return pick(POOLS.animals, 15); } },
+  { id:'colors',  name:'Colores',  emoji:'🌈', bunny:'🐰', get words(){ return pick(POOLS.colors,  15); } },
+  { id:'numbers', name:'Números',  emoji:'🔢', bunny:'🐇', get words(){ return pick(POOLS.numbers, 15); } },
+];
+      {de:'das Auge',        es:'el ojo',        emoji:'👁️',  pron:'/ˈaʊ.ɡə/'},
+      {de:'die Nase',        es:'la nariz',      emoji:'👃',  pron:'/ˈnaː.zə/'},
+      {de:'der Mund',        es:'la boca',       emoji:'👄',  pron:'/mʊnt/'},
+      {de:'das Ohr',         es:'la oreja',      emoji:'👂',  pron:'/oːɐ̯/'},
+      {de:'die Hand',        es:'la mano',       emoji:'✋',  pron:'/hant/'},
+      {de:'der Fuß',         es:'el pie',        emoji:'🦶',  pron:'/fuːs/'},
+      {de:'das Bein',        es:'la pierna',     emoji:'🦵',  pron:'/baɪ̯n/'},
+      {de:'der Bauch',       es:'la barriga',    emoji:'🫃',  pron:'/baʊ̯x/'},
+      {de:'das Herz',        es:'el corazón',    emoji:'🫀',  pron:'/hɛʁts/'},
+      {de:'der Rücken',      es:'la espalda',    emoji:'🧍',  pron:'/ˈʁʏ.kən/'},
+      {de:'der Arm',         es:'el brazo',      emoji:'💪',  pron:'/aʁm/'},
+      {de:'der Finger',      es:'el dedo',       emoji:'☝️',  pron:'/ˈfɪŋ.ɐ/'},
+      {de:'das Knie',        es:'la rodilla',    emoji:'🦵',  pron:'/kniː/'},
+      {de:'der Hals',        es:'el cuello',     emoji:'🧣',  pron:'/hals/'},
+    ]},
+  { id:'school', name:'Útiles', emoji:'🎒', bunny:'🐇',
+    words:[
+      {de:'der Stift',         es:'el lápiz',       emoji:'✏️',  pron:'/ʃtɪft/'},
+      {de:'das Buch',          es:'el libro',        emoji:'📚',  pron:'/buːx/'},
+      {de:'die Schere',        es:'las tijeras',     emoji:'✂️',  pron:'/ˈʃeː.ʁə/'},
+      {de:'das Heft',          es:'el cuaderno',     emoji:'📓',  pron:'/hɛft/'},
+      {de:'der Radiergummi',   es:'la goma',         emoji:'🧹',  pron:'/ʁaˈdiːɐ̯.ɡʊ.mi/'},
+      {de:'der Rucksack',      es:'la mochila',      emoji:'🎒',  pron:'/ˈʁʊk.zak/'},
+      {de:'das Lineal',        es:'la regla',        emoji:'📏',  pron:'/liˈneːaːl/'},
+      {de:'der Kleber',        es:'el pegamento',    emoji:'🧴',  pron:'/ˈkleː.bɐ/'},
+      {de:'die Farbe',         es:'la pintura',      emoji:'🎨',  pron:'/ˈfaʁ.bə/'},
+      {de:'der Tisch',         es:'la mesa',         emoji:'🪑',  pron:'/tɪʃ/'},
+      {de:'der Stuhl',         es:'la silla',        emoji:'🪑',  pron:'/ʃtuːl/'},
+      {de:'die Tafel',         es:'la pizarra',      emoji:'🟫',  pron:'/ˈtaː.fəl/'},
+      {de:'der Bleistift',     es:'el lápiz de grafito', emoji:'✏️', pron:'/ˈblaɪ̯.ʃtɪft/'},
+      {de:'das Papier',        es:'el papel',        emoji:'📄',  pron:'/paˈpiːɐ̯/'},
+      {de:'der Spitzer',       es:'el sacapuntas',   emoji:'🖊️',  pron:'/ˈʃpɪ.tsɐ/'},
+    ]},
+  { id:'fruits', name:'Frutas', emoji:'🍎', bunny:'🐰',
+    words:[
+      {de:'der Apfel',        es:'la manzana',    emoji:'🍎',  pron:'/ˈap.fəl/'},
+      {de:'die Banane',       es:'el plátano',    emoji:'🍌',  pron:'/baˈnaː.nə/'},
+      {de:'die Orange',       es:'la naranja',    emoji:'🍊',  pron:'/oˈʁaŋ.ʒə/'},
+      {de:'die Erdbeere',     es:'la fresa',      emoji:'🍓',  pron:'/ˈeːʁt.beː.ʁə/'},
+      {de:'die Traube',       es:'la uva',        emoji:'🍇',  pron:'/ˈtʁaʊ̯.bə/'},
+      {de:'die Zitrone',      es:'el limón',      emoji:'🍋',  pron:'/tsiˈtʁoː.nə/'},
+      {de:'die Kirsche',      es:'la cereza',     emoji:'🍒',  pron:'/ˈkɪʁ.ʃə/'},
+      {de:'die Wassermelone', es:'la sandía',     emoji:'🍉',  pron:'/ˈva.sɐ.me.loː.nə/'},
+      {de:'die Ananas',       es:'la piña',       emoji:'🍍',  pron:'/ˈa.na.nas/'},
+      {de:'die Birne',        es:'la pera',       emoji:'🍐',  pron:'/ˈbɪʁ.nə/'},
+      {de:'die Mango',        es:'el mango',      emoji:'🥭',  pron:'/ˈmaŋ.ɡo/'},
+      {de:'die Pflaume',      es:'la ciruela',    emoji:'🫐',  pron:'/ˈpflaʊ̯.mə/'},
+      {de:'die Himbeere',     es:'la frambuesa',  emoji:'🍓',  pron:'/ˈhɪm.beː.ʁə/'},
+      {de:'die Kokosnuss',    es:'el coco',       emoji:'🥥',  pron:'/ˈkoː.kos.nʊs/'},
+      {de:'die Melone',       es:'el melón',      emoji:'🍈',  pron:'/meˈloː.nə/'},
+    ]},
+  { id:'animals', name:'Animales', emoji:'🐶', bunny:'🐇',
+    words:[
+      {de:'der Hund',         es:'el perro',      emoji:'🐶',  pron:'/hʊnt/'},
+      {de:'die Katze',        es:'el gato',       emoji:'🐱',  pron:'/ˈkat.tsə/'},
+      {de:'das Pferd',        es:'el caballo',    emoji:'🐴',  pron:'/pfeːʁt/'},
+      {de:'der Vogel',        es:'el pájaro',     emoji:'🐦',  pron:'/ˈfoː.ɡəl/'},
+      {de:'der Fisch',        es:'el pez',        emoji:'🐟',  pron:'/fɪʃ/'},
+      {de:'die Kuh',          es:'la vaca',       emoji:'🐄',  pron:'/kuː/'},
+      {de:'das Schwein',      es:'el cerdo',      emoji:'🐷',  pron:'/ʃvaɪ̯n/'},
+      {de:'der Löwe',         es:'el león',       emoji:'🦁',  pron:'/ˈløː.və/'},
+      {de:'der Elefant',      es:'el elefante',   emoji:'🐘',  pron:'/ˈeː.le.fant/'},
+      {de:'das Kaninchen',    es:'el conejo',     emoji:'🐰',  pron:'/kaˈniːn.çən/'},
+      {de:'der Bär',          es:'el oso',        emoji:'🐻',  pron:'/bɛːɐ̯/'},
+      {de:'die Schlange',     es:'la serpiente',  emoji:'🐍',  pron:'/ˈʃlaŋ.ə/'},
+      {de:'der Affe',         es:'el mono',       emoji:'🐒',  pron:'/ˈa.fə/'},
+      {de:'die Ente',         es:'el pato',       emoji:'🦆',  pron:'/ˈɛn.tə/'},
+      {de:'der Tiger',        es:'el tigre',      emoji:'🐯',  pron:'/ˈtiː.ɡɐ/'},
+    ]},
+let currentTopic=null, currentIndex=0, isFlipped=false, gameMode='flash';
+let totalStars=parseInt(localStorage.getItem('hasiCarrots')||'0');
+let streak=0, quizCorrect=0, quizTotal=0;
+let bestScores=JSON.parse(localStorage.getItem('hasiBest')||'{}');
+let wrongCards=[];       // words Olivia marked wrong
+let isReviewRound=false; // true when replaying wrong cards
+
+window.onload=()=>{spawnFloaties();renderTopics();updateScoreBar();};
+
+function spawnFloaties(){
+  const c=document.getElementById('bgFloat');
+  const items=['🐰','🥕','🌸','🐾','⭐','🌷','🐇','✨','💜'];
+  for(let i=0;i<28;i++){
+    const el=document.createElement('div');
+    el.className='floaty';
+    el.textContent=items[Math.floor(Math.random()*items.length)];
+    el.style.cssText=`left:${Math.random()*100}%;animation-duration:${Math.random()*18+10}s;animation-delay:${Math.random()*12}s;font-size:${Math.random()*1.2+0.9}rem;`;
+    c.appendChild(el);
+  }
+}
+
+function renderTopics(){
+  const grid=document.getElementById('topicsGrid');
+  grid.innerHTML='';
+  TOPICS.forEach(topic=>{
+    const best=bestScores[topic.id];
+    const card=document.createElement('div');
+    card.className='topic-card';
+    card.innerHTML=`
+      ${best?`<div class="best-badge">🥕 ${best}</div>`:''}
+      <span class="card-main-emoji">${topic.emoji}</span>
+      <div class="topic-name">${topic.name}</div>
+      <div class="topic-count">${topic.words.length} palabras</div>
+    `;
+    card.onclick=()=>startTopic(topic);
+    grid.appendChild(card);
+  });
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function goToTopics(){showScreen('screen-topics');renderTopics();}
+
+function startTopic(topic){
+  currentTopic=topic; currentIndex=0; isFlipped=false; quizCorrect=0; quizTotal=0;
+  wrongCards=[]; isReviewRound=false;
+  document.getElementById('topicTitleBar').textContent=topic.bunny+' '+topic.name;
+  setMode(gameMode); updateProgress(); showScreen('screen-game');
+}
+
+function replayTopic(){startTopic(currentTopic);}
+
+function setMode(mode){
+  gameMode=mode;
+  document.getElementById('tabFlash').classList.toggle('active',mode==='flash');
+  document.getElementById('tabQuiz').classList.toggle('active',mode==='quiz');
+  document.getElementById('modeFlash').style.display=mode==='flash'?'block':'none';
+  document.getElementById('modeQuiz').style.display=mode==='quiz'?'block':'none';
+  currentIndex=0; isFlipped=false; wrongCards=[]; isReviewRound=false;
+  if(mode==='flash') renderFlashcard(); else renderQuiz();
+  updateProgress();
+}
+
+function renderFlashcard(){
+  const words = isReviewRound ? wrongCards : currentTopic.words;
+  const word=words[currentIndex];
+  document.getElementById('flashcard').classList.remove('flipped');
+  isFlipped=false;
+  // Show/hide grade controls
+  document.getElementById('navBeforeFlip').style.display='block';
+  document.getElementById('navAfterFlip').style.display='none';
+  // Review banner
+  let banner=document.getElementById('reviewBanner');
+  if(isReviewRound){
+    if(!banner){
+      banner=document.createElement('div');
+      banner.id='reviewBanner';
+      banner.className='review-banner';
+      document.getElementById('modeFlash').insertBefore(banner, document.querySelector('.article-legend'));
+    }
+    banner.innerHTML=`<span class="review-icon">🔄</span>Repasando ${wrongCards.length} palabra${wrongCards.length>1?'s':''} que no sabías`;
+  } else {
+    if(banner) banner.remove();
+  }
+  const parts=word.de.split(' ');
+  const article=parts.length>1?parts[0]:'';
+  const base=parts.length>1?parts.slice(1).join(' '):parts[0];
+  const badge=document.getElementById('cardArticleBadge');
+  if(article){
+    badge.textContent=article;
+    badge.className='card-article-badge article-'+article;
+  } else {
+    badge.textContent='';
+    badge.className='card-article-badge article-none';
+  }
+  document.getElementById('cardDe').textContent=base;
+  document.getElementById('cardEmojiBack').textContent=word.emoji;
+  document.getElementById('cardEs').textContent=word.es;
+  document.getElementById('cardPron').textContent=word.pron;
+  speakWord(word.de);
+  updateProgress();
+}
+
+function flipCard(){
+  isFlipped=!isFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped',isFlipped);
+  document.getElementById('navBeforeFlip').style.display = isFlipped ? 'none' : 'block';
+  document.getElementById('navAfterFlip').style.display  = isFlipped ? 'flex' : 'none';
+}
+
+function gradeCard(knew){
+  const words = isReviewRound ? wrongCards : currentTopic.words;
+  const word = words[currentIndex];
+  if(!knew && !isReviewRound){
+    // Record as wrong for review round (avoid duplicates)
+    if(!wrongCards.find(w=>w.de===word.de)) wrongCards.push(word);
+  }
+  if(knew){ streak++; totalStars++; localStorage.setItem('hasiCarrots',totalStars); updateScoreBar(); }
+  else { streak=0; updateScoreBar(); }
+
+  const next = currentIndex + 1;
+  if(next < words.length){
+    currentIndex = next;
+    renderFlashcard();
+  } else {
+    // First round done — if there are wrong cards, do review round
+    if(!isReviewRound && wrongCards.length > 0){
+      isReviewRound = true;
+      currentIndex = 0;
+      renderFlashcard();
+    } else {
+      showResults();
+    }
+  }
+}
+
+// Keep for quiz nav compatibility
+function nextCard(){ gradeCard(true); }
+function prevCard(){}
+
+function renderQuiz(){
+  const words=currentTopic.words;
+  const word=words[currentIndex];
+  document.getElementById('quizWord').textContent=word.es;
+  // Reset audio button
+  const ab=document.getElementById('quizAudioBtn');
+  if(ab){ab.disabled=false;ab.textContent='🔊 Escuchar en alemán';}
+  const others=words.filter((_,i)=>i!==currentIndex);
+  shuffle(others);
+  const options=shuffle([word,...others.slice(0,3)]);
+  const container=document.getElementById('quizOptions');
+  container.innerHTML='';
+  options.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='quiz-option';
+    // Show article + word
+    btn.textContent=opt.de;
+    btn.onclick=()=>handleQuizAnswer(btn,opt,word);
+    container.appendChild(btn);
+  });
+}
+
+function handleQuizAnswer(btn,chosen,correct){
+  document.querySelectorAll('.quiz-option').forEach(b=>b.disabled=true);
+  quizTotal++;
+  if(chosen===correct){
+    btn.classList.add('correct');
+    quizCorrect++;streak++;totalStars++;
+    localStorage.setItem('hasiCarrots',totalStars);
+    updateScoreBar();
+    setTimeout(()=>{
+      if(currentIndex<currentTopic.words.length-1){currentIndex++;renderQuiz();updateProgress();}
+      else showResults();
+    },900);
+  }else{
+    btn.classList.add('wrong');
+    streak=0;updateScoreBar();
+    document.querySelectorAll('.quiz-option').forEach(b=>{if(b.textContent===correct.de)b.classList.add('correct');});
+    setTimeout(()=>{
+      if(currentIndex<currentTopic.words.length-1){currentIndex++;renderQuiz();updateProgress();}
+      else showResults();
+    },1400);
+  }
+}
+
+function updateProgress(){
+  const words = isReviewRound ? wrongCards : currentTopic.words;
+  const pct=((currentIndex+1)/words.length)*100;
+  document.getElementById('progressFill').style.width=pct+'%';
+}
+
+function showResults(){
+  const pct=quizTotal>0?Math.round((quizCorrect/quizTotal)*100):100;
+  const earned=gameMode==='quiz'?quizCorrect:currentTopic.words.length;
+  const prev=bestScores[currentTopic.id]||0;
+  if(earned>prev){bestScores[currentTopic.id]=earned;localStorage.setItem('hasiBest',JSON.stringify(bestScores));}
+  if(gameMode==='flash'){totalStars+=2;localStorage.setItem('hasiCarrots',totalStars);updateScoreBar();}
+
+  let bunny='🐰',title='¡Excelente!',sub='';
+  if(gameMode==='quiz'){
+    if(pct===100)    {bunny='🏆';title='¡Perfecto! Wunderbar!';sub='¡Todo correcto! ¡Así se hace!';}
+    else if(pct>=70) {bunny='🐰';title='¡Muy bien! Gut gemacht!';sub=`${quizCorrect} de ${quizTotal} correctas 🥕`;}
+    else             {bunny='🐇';title='¡Sigue practicando!';sub=`${quizCorrect} de ${quizTotal}. ¡Tú puedes!`;}
+  } else {
+    const total=currentTopic.words.length;
+    const wrong=wrongCards.length;
+    const knew=total-wrong;
+    if(wrong===0)          {bunny='🏆';title='¡Perfecto! Wunderbar!';sub='¡Sabías todas las palabras!';}
+    else if(knew>=total*0.7){bunny='🐰';title='¡Muy bien! Gut gemacht!';sub=`Sabías ${knew} de ${total} palabras 🥕`;}
+    else                   {bunny='🐇';title='¡Sigue practicando!';sub=`Sabías ${knew} de ${total}. ¡Ya casi!`;}
+    document.getElementById('resultCorrect').textContent=`${knew}/${total}`;
+  }
+
+  document.getElementById('resultBunny').textContent=bunny;
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultSub').textContent=sub;
+  if(gameMode==='quiz') document.getElementById('resultCorrect').textContent=`${quizCorrect}/${quizTotal}`;
+  document.getElementById('resultCarrots').textContent=totalStars;
+
+  if(pct>=70||gameMode==='flash') launchConfetti();
+  showScreen('screen-results');
+}
+
+function updateScoreBar(){
+  document.getElementById('totalStars').textContent=totalStars;
+  document.getElementById('streak').textContent=streak;
+}
+
+function launchConfetti(){
+  const container=document.getElementById('confettiContainer');
+  container.innerHTML='';
+  const emojis=['🐰','🥕','⭐','🌸','🐾','💜','🌷','✨','🐇'];
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    const dur=Math.random()*2.2+2;
+    const delay=Math.random()*1.8;
+    el.style.cssText=`left:${Math.random()*100}%;font-size:${Math.random()*18+14}px;animation:cfFall ${dur}s ${delay}s linear forwards;`;
+    el.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+    container.appendChild(el);
+  }
+  setTimeout(()=>{container.innerHTML='';},5000);
+}
+
+// ============================================================
+// SPEECH SYNTHESIS
+// ============================================================
+let speechVoice=null;
+
+function initVoice(){
+  if(speechVoice) return;
+  const voices=speechSynthesis.getVoices();
+  // Prefer a German voice
+  speechVoice = voices.find(v=>v.lang==='de-DE') ||
+                voices.find(v=>v.lang.startsWith('de')) ||
+                null;
+}
+
+// Try to load voices (they may load async)
+speechSynthesis.onvoiceschanged=initVoice;
+initVoice();
+
+function speakWord(text){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  initVoice();
+  const utt=new SpeechSynthesisUtterance(text);
+  utt.lang='de-DE';
+  utt.rate=0.85;
+  utt.pitch=1.05;
+  if(speechVoice) utt.voice=speechVoice;
+  speechSynthesis.speak(utt);
+}
+
+function speakCurrent(e){
+  if(e){e.stopPropagation();}
+  const word=currentTopic.words[currentIndex];
+  speakWord(word.de);
+  const btn=document.getElementById('flashAudioBtn');
+  if(btn){btn.textContent='🔊 Reproduciendo…';setTimeout(()=>{btn.textContent='🔊 Escuchar';},1500);}
+}
+
+function speakCurrentQuiz(e){
+  if(e){e.stopPropagation();}
+  const word=currentTopic.words[currentIndex];
+  // In quiz we play the correct word so Olivia can hear it after answering
+  speakWord(word.de);
+  const btn=document.getElementById('quizAudioBtn');
+  if(btn){btn.textContent='🔊 Reproduciendo…';setTimeout(()=>{btn.textContent='🔊 Escuchar en alemán';},1500);}
+}
+
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  return arr;
+}
+</script>
+</body>
+</html>
