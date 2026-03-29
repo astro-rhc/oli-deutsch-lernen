@@ -821,6 +821,7 @@ const TOPICS = [
 ];
 
 let currentTopic=null, currentIndex=0, isFlipped=false, gameMode='flash';
+let currentWords=[];     // fixed word list for this round (avoids re-calling random getter)
 let totalStars=parseInt(localStorage.getItem('hasiCarrots')||'0');
 let streak=0, quizCorrect=0, quizTotal=0;
 let bestScores=JSON.parse(localStorage.getItem('hasiBest')||'{}');
@@ -870,6 +871,7 @@ function goToTopics(){showScreen('screen-topics');renderTopics();}
 function startTopic(topic){
   currentTopic=topic; currentIndex=0; isFlipped=false; quizCorrect=0; quizTotal=0;
   wrongCards=[]; isReviewRound=false;
+  currentWords = topic.words; // snapshot — calls getter exactly once
   document.getElementById('topicTitleBar').textContent=topic.bunny+' '+topic.name;
   setMode(gameMode); updateProgress(); showScreen('screen-game');
 }
@@ -883,12 +885,13 @@ function setMode(mode){
   document.getElementById('modeFlash').style.display=mode==='flash'?'block':'none';
   document.getElementById('modeQuiz').style.display=mode==='quiz'?'block':'none';
   currentIndex=0; isFlipped=false; wrongCards=[]; isReviewRound=false;
+  currentWords = currentTopic.words; // new random pick when switching mode
   if(mode==='flash') renderFlashcard(); else renderQuiz();
   updateProgress();
 }
 
 function renderFlashcard(){
-  const words = isReviewRound ? wrongCards : currentTopic.words;
+  const words = isReviewRound ? wrongCards : currentWords;
   const word=words[currentIndex];
   document.getElementById('flashcard').classList.remove('flipped');
   isFlipped=false;
@@ -908,9 +911,10 @@ function renderFlashcard(){
   } else {
     if(banner) banner.remove();
   }
+  const ARTICLES = new Set(['der','die','das']);
   const parts=word.de.split(' ');
-  const article=parts.length>1?parts[0]:'';
-  const base=parts.length>1?parts.slice(1).join(' '):parts[0];
+  const article = ARTICLES.has(parts[0]) ? parts[0] : '';
+  const base = article ? parts.slice(1).join(' ') : word.de;
   const badge=document.getElementById('cardArticleBadge');
   if(article){
     badge.textContent=article;
@@ -935,7 +939,7 @@ function flipCard(){
 }
 
 function gradeCard(knew){
-  const words = isReviewRound ? wrongCards : currentTopic.words;
+  const words = isReviewRound ? wrongCards : currentWords;
   const word = words[currentIndex];
   if(!knew && !isReviewRound){
     // Record as wrong for review round (avoid duplicates)
@@ -965,7 +969,7 @@ function nextCard(){ gradeCard(true); }
 function prevCard(){}
 
 function renderQuiz(){
-  const words=currentTopic.words;
+  const words=currentWords;
   const word=words[currentIndex];
   document.getElementById('quizWord').textContent=word.es;
   // Reset audio button
@@ -995,7 +999,7 @@ function handleQuizAnswer(btn,chosen,correct){
     localStorage.setItem('hasiCarrots',totalStars);
     updateScoreBar();
     setTimeout(()=>{
-      if(currentIndex<currentTopic.words.length-1){currentIndex++;renderQuiz();updateProgress();}
+      if(currentIndex<currentWords.length-1){currentIndex++;renderQuiz();updateProgress();}
       else showResults();
     },900);
   }else{
@@ -1003,21 +1007,21 @@ function handleQuizAnswer(btn,chosen,correct){
     streak=0;updateScoreBar();
     document.querySelectorAll('.quiz-option').forEach(b=>{if(b.textContent===correct.de)b.classList.add('correct');});
     setTimeout(()=>{
-      if(currentIndex<currentTopic.words.length-1){currentIndex++;renderQuiz();updateProgress();}
+      if(currentIndex<currentWords.length-1){currentIndex++;renderQuiz();updateProgress();}
       else showResults();
     },1400);
   }
 }
 
 function updateProgress(){
-  const words = isReviewRound ? wrongCards : currentTopic.words;
+  const words = isReviewRound ? wrongCards : currentWords;
   const pct=((currentIndex+1)/words.length)*100;
   document.getElementById('progressFill').style.width=pct+'%';
 }
 
 function showResults(){
   const pct=quizTotal>0?Math.round((quizCorrect/quizTotal)*100):100;
-  const earned=gameMode==='quiz'?quizCorrect:currentTopic.words.length;
+  const earned=gameMode==='quiz'?quizCorrect:currentWords.length;
   const prev=bestScores[currentTopic.id]||0;
   if(earned>prev){bestScores[currentTopic.id]=earned;localStorage.setItem('hasiBest',JSON.stringify(bestScores));}
   if(gameMode==='flash'){totalStars+=2;localStorage.setItem('hasiCarrots',totalStars);updateScoreBar();}
@@ -1028,7 +1032,7 @@ function showResults(){
     else if(pct>=70) {bunny='🐰';title='¡Muy bien! Gut gemacht!';sub=`${quizCorrect} de ${quizTotal} correctas 🥕`;}
     else             {bunny='🐇';title='¡Sigue practicando!';sub=`${quizCorrect} de ${quizTotal}. ¡Tú puedes!`;}
   } else {
-    const total=currentTopic.words.length;
+    const total=currentWords.length;
     const wrong=wrongCards.length;
     const knew=total-wrong;
     if(wrong===0)          {bunny='🏆';title='¡Perfecto! Wunderbar!';sub='¡Sabías todas las palabras!';}
@@ -1100,7 +1104,8 @@ function speakWord(text){
 
 function speakCurrent(e){
   if(e){e.stopPropagation();}
-  const word=currentTopic.words[currentIndex];
+  const words = isReviewRound ? wrongCards : currentWords;
+  const word=words[currentIndex];
   speakWord(word.de);
   const btn=document.getElementById('flashAudioBtn');
   if(btn){btn.textContent='🔊 Reproduciendo…';setTimeout(()=>{btn.textContent='🔊 Escuchar';},1500);}
@@ -1108,8 +1113,7 @@ function speakCurrent(e){
 
 function speakCurrentQuiz(e){
   if(e){e.stopPropagation();}
-  const word=currentTopic.words[currentIndex];
-  // In quiz we play the correct word so Olivia can hear it after answering
+  const word=currentWords[currentIndex];
   speakWord(word.de);
   const btn=document.getElementById('quizAudioBtn');
   if(btn){btn.textContent='🔊 Reproduciendo…';setTimeout(()=>{btn.textContent='🔊 Escuchar en alemán';},1500);}
