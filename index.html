@@ -907,7 +907,8 @@ function renderFlashcard(){
   document.getElementById('cardEmojiBack').textContent=word.emoji;
   document.getElementById('cardEs').textContent=word.es;
   document.getElementById('cardPron').textContent=word.pron;
-  speakWord(word.de);
+  // Auto-play only on desktop — mobile requires a user gesture to play audio cleanly
+  if (!isMobile) speakWord(word.de);
   updateProgress();
 }
 
@@ -1055,48 +1056,60 @@ function launchConfetti(){
 // ============================================================
 // SPEECH SYNTHESIS
 // ============================================================
-let speechVoice=null;
+// Detect mobile
+const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
-function initVoice(){
-  if(speechVoice) return;
-  const voices=speechSynthesis.getVoices();
-  // Prefer a German voice
-  speechVoice = voices.find(v=>v.lang==='de-DE') ||
-                voices.find(v=>v.lang.startsWith('de')) ||
-                null;
+let speechVoice = null;
+
+function initVoice() {
+  const voices = speechSynthesis.getVoices();
+  if (!voices.length) return;
+
+  // Ranked preference: natural/enhanced > standard, de-DE > de
+  const deVoices = voices.filter(v => v.lang.startsWith('de'));
+
+  // Prefer "natural" or "enhanced" voices (better quality on iOS/macOS)
+  const natural = deVoices.find(v => /natural|enhanced|premium/i.test(v.name));
+  // Then prefer de-DE specifically
+  const deDE = deVoices.find(v => v.lang === 'de-DE');
+  // Fallback to any German voice
+  const anyDe = deVoices[0];
+
+  speechVoice = natural || deDE || anyDe || null;
 }
 
-// Try to load voices (they may load async)
-speechSynthesis.onvoiceschanged=initVoice;
+speechSynthesis.onvoiceschanged = initVoice;
 initVoice();
 
-function speakWord(text){
-  if(!('speechSynthesis' in window)) return;
+function speakWord(text) {
+  if (!('speechSynthesis' in window)) return;
+  // iOS requires cancelling before speaking
   speechSynthesis.cancel();
   initVoice();
-  const utt=new SpeechSynthesisUtterance(text);
-  utt.lang='de-DE';
-  utt.rate=0.85;
-  utt.pitch=1.05;
-  if(speechVoice) utt.voice=speechVoice;
-  speechSynthesis.speak(utt);
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = 'de-DE';
+  utt.rate = isMobile ? 0.8 : 0.85;  // slightly slower on mobile
+  utt.pitch = 1.0;
+  if (speechVoice) utt.voice = speechVoice;
+  // iOS Safari needs a tiny delay after cancel()
+  setTimeout(() => speechSynthesis.speak(utt), isMobile ? 50 : 0);
 }
 
-function speakCurrent(e){
-  if(e){e.stopPropagation();}
+function speakCurrent(e) {
+  if (e) e.stopPropagation();
   const words = isReviewRound ? wrongCards : currentWords;
-  const word=words[currentIndex];
+  const word = words[currentIndex];
   speakWord(word.de);
-  const btn=document.getElementById('flashAudioBtn');
-  if(btn){btn.textContent='🔊 Reproduciendo…';setTimeout(()=>{btn.textContent='🔊 Escuchar';},1500);}
+  const btn = document.getElementById('flashAudioBtn');
+  if (btn) { btn.textContent = '🔊 Reproduciendo…'; setTimeout(() => { btn.textContent = '🔊 Escuchar'; }, 1800); }
 }
 
-function speakCurrentQuiz(e){
-  if(e){e.stopPropagation();}
-  const word=currentWords[currentIndex];
+function speakCurrentQuiz(e) {
+  if (e) e.stopPropagation();
+  const word = currentWords[currentIndex];
   speakWord(word.de);
-  const btn=document.getElementById('quizAudioBtn');
-  if(btn){btn.textContent='🔊 Reproduciendo…';setTimeout(()=>{btn.textContent='🔊 Escuchar en alemán';},1500);}
+  const btn = document.getElementById('quizAudioBtn');
+  if (btn) { btn.textContent = '🔊 Reproduciendo…'; setTimeout(() => { btn.textContent = '🔊 Escuchar en alemán'; }, 1800); }
 }
 
 function shuffle(arr){
