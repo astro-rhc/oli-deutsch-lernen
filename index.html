@@ -346,7 +346,16 @@
     /* RESULTS */
     #screen-results { max-width: 480px; margin: 0 auto; padding: 40px 24px; text-align: center; }
 
-    .result-bunny {
+    .kofi-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: #FF5E5B; color: white;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.82rem;
+      padding: 5px 14px; border-radius: 999px;
+      text-decoration: none; position: relative;
+      border: none; cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .kofi-btn:hover { background: #e04e4b; transform: scale(1.05); }
       font-size: 5.5rem; display: block; margin-bottom: 10px;
       animation: bigBounce 0.65s cubic-bezier(0.34,1.56,0.64,1);
     }
@@ -368,7 +377,35 @@
     }
     @keyframes cfFall { 0%{transform:translateY(0) rotate(0deg) scale(1);opacity:1} 100%{transform:translateY(110vh) rotate(720deg) scale(0.5);opacity:0} }
 
-    @media (max-width: 400px) {
+    .kofi-wrap { text-align:center; margin-top:20px; }
+    .kofi-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: #FF5E5B;
+      color: white;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800; font-size: 0.95rem;
+      padding: 11px 24px;
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 4px 14px rgba(255,94,91,0.35);
+    }
+    .kofi-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(255,94,91,0.45); }
+
+    .footer-kofi {
+      text-align: center;
+      padding: 20px 0 28px;
+      position: relative; z-index: 5;
+    }
+    .footer-kofi a {
+      color: var(--p400);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+    .footer-kofi a:hover { opacity: 1; }
       .quiz-options { grid-template-columns: 1fr; }
       .card-word-de { font-size: 1.8rem; }
       .topics-grid { grid-template-columns: repeat(2, 1fr); }
@@ -757,6 +794,28 @@ const POOLS = {
     {de:'transparent',      es:'transparente',         emoji:'🫧',  pron:'/tʁanspaˈʁɛnt/'},
     {de:'hellrosa',         es:'rosado claro',         emoji:'🩷',  pron:'/ˈhɛl.ʁoː.za/'},
   ],
+  geo: [
+    {de:'das Meer',         es:'el mar',                emoji:'🌊',  pron:'/meːɐ̯/'},
+    {de:'die Insel',        es:'la isla',               emoji:'🏝️',  pron:'/ˈɪn.zəl/'},
+    {de:'die Halbinsel',    es:'la península',          emoji:'🗺️',  pron:'/ˈhalp.ɪn.zəl/'},
+    {de:'das Gebirge',      es:'la cordillera / montañas',emoji:'⛰️', pron:'/ɡəˈbɪʁ.ɡə/'},
+    {de:'das Tal',          es:'el valle',              emoji:'🏔️',  pron:'/taːl/'},
+    {de:'die Küste',        es:'la costa',              emoji:'🏖️',  pron:'/ˈkʏs.tə/'},
+    {de:'die Karte',        es:'el mapa',               emoji:'🗺️',  pron:'/ˈkaʁ.tə/'},
+    {de:'der Norden',       es:'el norte',              emoji:'🧭',  pron:'/ˈnɔʁ.dən/'},
+    {de:'der Süden',        es:'el sur',                emoji:'🧭',  pron:'/ˈzyː.dən/'},
+    {de:'der Osten',        es:'el este',               emoji:'🧭',  pron:'/ˈɔs.tən/'},
+    {de:'der Westen',       es:'el oeste',              emoji:'🧭',  pron:'/ˈvɛs.tən/'},
+    {de:'die Region',       es:'la región',             emoji:'🗺️',  pron:'/ʁeˈɡjoːn/'},
+    {de:'Griechenland',     es:'Grecia',                emoji:'🇬🇷',  pron:'/ˈɡʁiː.çən.lant/'},
+    {de:'das Mittelmeer',   es:'el mar Mediterráneo',   emoji:'🌊',  pron:'/ˈmɪ.təl.meːɐ̯/'},
+    {de:'liegen',           es:'estar ubicado / yacer', emoji:'📍',  pron:'/ˈliː.ɡən/'},
+    {de:'sich befinden',    es:'encontrarse / estar',   emoji:'📍',  pron:'/zɪç bəˈfɪn.dən/'},
+    {de:'grenzen an',       es:'limitar con',           emoji:'🗺️',  pron:'/ˈɡʁɛn.tsən an/'},
+    {de:'bestehen aus',     es:'estar compuesto de',    emoji:'🔍',  pron:'/bəˈʃteː.ən aʊ̯s/'},
+    {de:'einzeichnen',      es:'dibujar / marcar en el mapa',emoji:'✏️', pron:'/ˈaɪ̯n.tsaɪ̯ç.nən/'},
+    {de:'beschriften',      es:'etiquetar / rotular',   emoji:'🖊️',  pron:'/bəˈʃʁɪf.tən/'},
+  ],
   numbers: [
     {de:'eins',              es:'uno',           emoji:'1️⃣',   pron:'/aɪ̯ns/'},
     {de:'zwei',              es:'dos',           emoji:'2️⃣',   pron:'/tsvaɪ̯/'},
@@ -797,7 +856,7 @@ const TOPICS = [
   { id:'fruits',  name:'Frutas',   emoji:'🍎', bunny:'🐰', get words(){ return pick(POOLS.fruits,  15); } },
   { id:'animals', name:'Animales', emoji:'🐶', bunny:'🐇', get words(){ return pick(POOLS.animals, 15); } },
   { id:'colors',  name:'Colores',  emoji:'🌈', bunny:'🐰', get words(){ return pick(POOLS.colors,  15); } },
-  { id:'numbers', name:'Números',  emoji:'🔢', bunny:'🐇', get words(){ return pick(POOLS.numbers, 15); } },
+  { id:'geo', name:'Geografía', emoji:'🌍', bunny:'🐰', get words(){ return pick(POOLS.geo, POOLS.geo.length); } },
 ];
 
 let currentTopic=null, currentIndex=0, isFlipped=false, gameMode='flash';
@@ -1117,5 +1176,9 @@ function shuffle(arr){
   return arr;
 }
 </script>
+<div class="footer-kofi">
+  <a href="https://ko-fi.com/olialeman" target="_blank">☕ Buy me a coffee</a>
+</div>
+
 </body>
 </html>
