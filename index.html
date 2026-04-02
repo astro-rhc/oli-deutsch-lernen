@@ -857,7 +857,7 @@ const TOPICS = [
   { id:'animals', name:'Animales', emoji:'🐶', bunny:'🐇', get words(){ return pick(POOLS.animals, 15); } },
   { id:'colors',  name:'Colores',  emoji:'🌈', bunny:'🐰', get words(){ return pick(POOLS.colors,  15); } },
   { id:'numbers', name:'Números',  emoji:'🔢', bunny:'🐇', get words(){ return pick(POOLS.numbers, 15); } },
-  { id:'geo', name:'Geografía', emoji:'🌍', bunny:'🐰', get words(){ return pick(POOLS.geo, POOLS.geo.length); } },
+  { id:'geo', name:'Geografía', emoji:'🌍', bunny:'🐰', get words(){ return pick(POOLS.geo, 15); } },
 ];
 
 let currentTopic=null, currentIndex=0, isFlipped=false, gameMode='flash';
